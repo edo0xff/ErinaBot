@@ -1,5 +1,5 @@
-API Reference
-=============
+ErinaBot API Reference
+======================
 
 .. automodule:: ErinaBot
    :members:
