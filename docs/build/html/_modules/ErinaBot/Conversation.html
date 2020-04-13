@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ErinaBot.Conversation &#8212; ErinaBot discord bot with NLP 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for ErinaBot.Conversation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The MIT License (MIT)</span>
+
+<span class="sd">Copyright (c) 2020 edo0xff</span>
+
+<span class="sd">Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="sd">copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="sd">to deal in the Software without restriction, including without limitation</span>
+<span class="sd">the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="sd">and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="sd">Software is furnished to do so, subject to the following conditions:</span>
+
+<span class="sd">The above copyright notice and this permission notice shall be included in</span>
+<span class="sd">all copies or substantial portions of the Software.</span>
+
+<span class="sd">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="sd">OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="sd">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="sd">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="sd">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="sd">FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="sd">DEALINGS IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">unidecode</span>
+<span class="kn">import</span> <span class="nn">Levenshtein</span>
+
+<span class="kn">from</span> <span class="nn">discord</span> <span class="kn">import</span> <span class="n">Embed</span><span class="p">,</span> <span class="n">Color</span>
+
+<span class="n">intention_callbacks</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">intentions_help</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">class</span> <span class="nc">Arguments</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yt_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">regex1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(</span><span class="se">\&#39;</span><span class="s1">|\&quot;)(.*)(</span><span class="se">\&#39;</span><span class="s1">|\&quot;)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">regex2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">regex3</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;(https?://)?(www\.)?&#39;</span>
+            <span class="s1">&#39;(youtube|youtu|youtube-nocookie)\.(com|be)/&#39;</span>
+            <span class="s1">&#39;(watch\?v=|embed/|v/|.+\?v=)?([^&amp;=%\?]</span><span class="si">{11}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">regex1</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">regex2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">regex3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yt_url</span> <span class="o">=</span> <span class="s2">&quot;http://www.youtube.com/watch?v=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">regex2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="Conversation"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.Conversation">[docs]</a><span class="k">class</span> <span class="nc">Conversation</span><span class="p">():</span>
+
+<div class="viewcode-block" id="Conversation.__init__"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.Conversation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+    <span class="k">def</span> <span class="nf">get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">set_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">clear_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">set_context_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="k">def</span> <span class="nf">get_context_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">load_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">loaded</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">question</span><span class="p">,</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">loaded</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">sub_question</span> <span class="ow">in</span> <span class="n">question</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">clear_string</span><span class="p">(</span><span class="n">sub_question</span><span class="p">),</span> <span class="n">answer</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">clear_string</span><span class="p">(</span><span class="n">question</span><span class="p">),</span> <span class="n">answer</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">clear_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">unidecode</span><span class="o">.</span><span class="n">unidecode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\&quot;|</span><span class="se">\&#39;</span><span class="s1">)(.+)(\&quot;|</span><span class="se">\&#39;</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(^e+r+i+\s+)|(\s+e+r+i+$)|(\s+e+r+i+\s+)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;(https?://)?(www\.)?&#39;</span>
+                <span class="s1">&#39;(youtube|youtu|youtube-nocookie)\.(com|be)/&#39;</span>
+                <span class="s1">&#39;(watch\?v=|embed/|v/|.+\?v=)?([^&amp;=%\?]</span><span class="si">{11}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">talking_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(^e+r+i+\s+)|(\s+e+r+i+$)|(\s+e+r+i+\s+)&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">recognize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">min_distance</span> <span class="o">=</span> <span class="mi">9999</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clear_string</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">)):</span>
+            <span class="n">question</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">Levenshtein</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">min_distance</span><span class="p">:</span>
+                <span class="n">min_distance</span> <span class="o">=</span> <span class="n">distance</span>
+                <span class="n">index</span> <span class="o">=</span>  <span class="n">i</span>
+
+        <span class="n">intention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">intention</span> <span class="o">==</span> <span class="s1">&#39;help&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">intentions_help</span><span class="p">:</span>
+                <span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">help</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">purple</span><span class="p">())</span>
+
+                <span class="k">await</span> <span class="n">msg</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">embed</span><span class="o">=</span><span class="n">embed</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intention</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">intention</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">msg</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">intention</span> <span class="ow">in</span> <span class="n">intention_callbacks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ConversationError: recognized intention &#39;</span><span class="si">%s</span><span class="s2">&#39; is not implemented&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">intention</span><span class="p">))</span>
+                <span class="k">return</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recognized intention: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">intention</span><span class="p">))</span>
+            <span class="k">await</span> <span class="n">intention_callbacks</span><span class="p">[</span><span class="n">intention</span><span class="p">](</span><span class="n">msg</span><span class="p">,</span> <span class="n">Arguments</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">clean_content</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">handle_intention</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">intention_callbacks</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
+    <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
+        <span class="n">intentions_help</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">func</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">conversation</span> <span class="o">=</span> <span class="n">Conversation</span><span class="p">()</span>
+
+    <span class="n">conversation</span><span class="o">.</span><span class="n">load_dictionary</span><span class="p">(</span><span class="s2">&quot;intentions.yml&quot;</span><span class="p">)</span>
+    <span class="n">conversation</span><span class="o">.</span><span class="n">load_dictionary</span><span class="p">(</span><span class="s2">&quot;dialogs.yml&quot;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Di algo: &quot;</span><span class="p">)</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">conversation</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prediction: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">ErinaBot discord bot with NLP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, edo0xff.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

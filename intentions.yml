@@ -1,0 +1,123 @@
+-
+   -
+      - ayuda
+      - que sabes hacer
+      - que puedes hacer
+      - help
+   - help
+-
+   -
+      - siguiente cancion
+      - la siguiente cancion
+      - la siguiente
+   - skip_song
+-
+   -
+      - lista de canciones
+      - que canciones tienes
+      - canciones decargadas
+   - list_downloaded_songs
+-
+   -
+      - pon el volumen
+      - volumen al
+      - volumen
+      - baja el volumen
+      - sube el volumen
+   - set_player_volume
+-
+   -
+      - pausa
+      - detener musica
+      - pausar musica
+      - deten la musica
+      - pausa la musica
+   - pause_music
+-
+   -
+      - deja el canal de voz
+      - sal del canal de voz
+      - abandona el canal de voz
+      - fuera del canal de voz
+      - largo del canal de voz
+      - sal de la llamada
+   - leave_voice_channel
+-
+   -
+      - ponle play
+      - play
+      - que suene la musica
+      - quita la pausa
+      - play a la musica
+   - resume_music
+-
+   -
+      - agrega
+      - agrega la
+      - agrega una cancion
+      - agrega una cancion a la playlist
+      - pon
+      - pon la
+      - pon musica
+      - quiero escuchar una cancion
+      - pon una cancion
+      - reproduce musica
+      - reproduce una cancion
+      - pon algo de musica
+      - quiero escuchar musica
+      - quiero escuchar algo de musica
+   - play_music
+-
+   -
+      - busca
+      - busca la cancion
+      - busca una cancion
+      - busca esta cancion
+      - busca esto
+      - busca esto en youtube
+      - busca canciones de
+   - yt_search
+-
+   -
+      - covid
+      - el covid en
+      - covid en
+      - que pasa con el covid
+      - como va el covid
+      - cual es el avance del coronavirus
+      - que esta pasando con el covid
+   - covid_statistics
+-
+   -
+      - manda nudes
+      - quiero ver chichis
+      - modo sexo
+      - ando bien electrico
+      - saca las panochas
+      - pasa unos nudes
+      - pasa unas imagenes sensuales
+      - manda algo ricolino
+   - send_nudes
+-
+   -
+      - programa un recordatorio
+      - recuerdame mas tarde
+      - avisame
+      - programa un aviso
+      - crea un recordatorio
+   - create_reminder
+-
+   -
+      - mandame un chiste
+      - cuentame un chiste
+      - conoces algun chiste
+      - sabes contar chistes
+      - te sabes algun chiste
+   - send_joke
+-
+   -
+      - estaria bueno un meme
+      - manda un meme
+      - quiero ver un meme
+      - te gustan los memes
+   - send_meme

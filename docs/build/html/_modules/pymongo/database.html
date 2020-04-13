@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>pymongo.database &#8212; ErinaBot API reference 0.1 documentation</title>
+
+    <link rel="stylesheet" href="../../_static/material-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/notosanscjkjp.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/roboto.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/material-design-lite-1.3.0/material.indigo-pink.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx_materialdesign_theme.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/sphinx_materialdesign_theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer"><header class="mdl-layout__header mdl-layout__header--waterfall ">
+    <div class="mdl-layout__header-row">
+        
+        <nav class="mdl-navigation breadcrumb">
+            <a class="mdl-navigation__link" href="../index.html">Module code</a><i class="material-icons">navigate_next</i>
+            <a class="mdl-navigation__link is-active">pymongo.database</a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+        
+<form class="form-inline pull-sm-right" action="../../search.html" method="get">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label id="quick-search-icon" class="mdl-button mdl-js-button mdl-button--icon"  for="waterfall-exp">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="q"  id="waterfall-exp" placeholder="Search" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </div>
+      </div>
+      <div class="mdl-tooltip" data-mdl-for="quick-search-icon">
+      Quick search
+      </div>
+</form>
+        
+        </nav>
+    </div>
+    <div class="mdl-layout__header-row header-links">
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+      </nav>
+    </div>
+</header><header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+        <main class="mdl-layout__content" tabIndex="0">
+<header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+
+    <div class="document">
+        <div class="page-content">
+        
+  <h1>Source code for pymongo.database</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2009-present MongoDB, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;Database level operations.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">bson.code</span> <span class="kn">import</span> <span class="n">Code</span>
+<span class="kn">from</span> <span class="nn">bson.codec_options</span> <span class="kn">import</span> <span class="n">DEFAULT_CODEC_OPTIONS</span>
+<span class="kn">from</span> <span class="nn">bson.dbref</span> <span class="kn">import</span> <span class="n">DBRef</span>
+<span class="kn">from</span> <span class="nn">bson.py3compat</span> <span class="kn">import</span> <span class="n">iteritems</span><span class="p">,</span> <span class="n">string_type</span><span class="p">,</span> <span class="n">_unicode</span>
+<span class="kn">from</span> <span class="nn">bson.son</span> <span class="kn">import</span> <span class="n">SON</span>
+<span class="kn">from</span> <span class="nn">pymongo</span> <span class="kn">import</span> <span class="n">auth</span><span class="p">,</span> <span class="n">common</span>
+<span class="kn">from</span> <span class="nn">pymongo.aggregation</span> <span class="kn">import</span> <span class="n">_DatabaseAggregationCommand</span>
+<span class="kn">from</span> <span class="nn">pymongo.change_stream</span> <span class="kn">import</span> <span class="n">DatabaseChangeStream</span>
+<span class="kn">from</span> <span class="nn">pymongo.collection</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="kn">from</span> <span class="nn">pymongo.command_cursor</span> <span class="kn">import</span> <span class="n">CommandCursor</span>
+<span class="kn">from</span> <span class="nn">pymongo.errors</span> <span class="kn">import</span> <span class="p">(</span><span class="n">CollectionInvalid</span><span class="p">,</span>
+                            <span class="n">ConfigurationError</span><span class="p">,</span>
+                            <span class="n">InvalidName</span><span class="p">,</span>
+                            <span class="n">OperationFailure</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pymongo.message</span> <span class="kn">import</span> <span class="n">_first_batch</span>
+<span class="kn">from</span> <span class="nn">pymongo.read_preferences</span> <span class="kn">import</span> <span class="n">ReadPreference</span>
+<span class="kn">from</span> <span class="nn">pymongo.son_manipulator</span> <span class="kn">import</span> <span class="n">SONManipulator</span>
+<span class="kn">from</span> <span class="nn">pymongo.write_concern</span> <span class="kn">import</span> <span class="n">DEFAULT_WRITE_CONCERN</span>
+
+
+<span class="n">_INDEX_REGEX</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^(?!.*\$)&quot;</span><span class="p">}}</span>
+<span class="n">_SYSTEM_FILTER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$regex&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;^(?!system\.)&quot;</span><span class="p">}}}</span>
+
+
+<span class="k">def</span> <span class="nf">_check_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if a database name is valid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">InvalidName</span><span class="p">(</span><span class="s2">&quot;database name cannot be the empty string&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">invalid_char</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">invalid_char</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidName</span><span class="p">(</span><span class="s2">&quot;database names cannot contain the &quot;</span>
+                              <span class="s2">&quot;character </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">invalid_char</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A Mongo database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">codec_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">write_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a database by client and name.</span>
+
+<span class="sd">        Raises :class:`TypeError` if `name` is not an instance of</span>
+<span class="sd">        :class:`basestring` (:class:`str` in python 3). Raises</span>
+<span class="sd">        :class:`~pymongo.errors.InvalidName` if `name` is not a valid</span>
+<span class="sd">        database name.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `client`: A :class:`~pymongo.mongo_client.MongoClient` instance.</span>
+<span class="sd">          - `name`: The database name.</span>
+<span class="sd">          - `codec_options` (optional): An instance of</span>
+<span class="sd">            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the</span>
+<span class="sd">            default) client.codec_options is used.</span>
+<span class="sd">          - `read_preference` (optional): The read preference to use. If</span>
+<span class="sd">            ``None`` (the default) client.read_preference is used.</span>
+<span class="sd">          - `write_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the</span>
+<span class="sd">            default) client.write_concern is used.</span>
+<span class="sd">          - `read_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.read_concern.ReadConcern`. If ``None`` (the</span>
+<span class="sd">            default) client.read_concern is used.</span>
+
+<span class="sd">        .. mongodoc:: databases</span>
+
+<span class="sd">        .. versionchanged:: 3.2</span>
+<span class="sd">           Added the read_concern option.</span>
+
+<span class="sd">        .. versionchanged:: 3.0</span>
+<span class="sd">           Added the codec_options, read_preference, and write_concern options.</span>
+<span class="sd">           :class:`~pymongo.database.Database` no longer returns an instance</span>
+<span class="sd">           of :class:`~pymongo.collection.Collection` for attribute names</span>
+<span class="sd">           with leading underscores. You must use dict-style lookups instead::</span>
+
+<span class="sd">               db[&#39;__my_collection__&#39;]</span>
+
+<span class="sd">           Not:</span>
+
+<span class="sd">               db.__my_collection__</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">codec_options</span> <span class="ow">or</span> <span class="n">client</span><span class="o">.</span><span class="n">codec_options</span><span class="p">,</span>
+            <span class="n">read_preference</span> <span class="ow">or</span> <span class="n">client</span><span class="o">.</span><span class="n">read_preference</span><span class="p">,</span>
+            <span class="n">write_concern</span> <span class="ow">or</span> <span class="n">client</span><span class="o">.</span><span class="n">write_concern</span><span class="p">,</span>
+            <span class="n">read_concern</span> <span class="ow">or</span> <span class="n">client</span><span class="o">.</span><span class="n">read_concern</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name must be an instance &quot;</span>
+                            <span class="s2">&quot;of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;$external&#39;</span><span class="p">:</span>
+            <span class="n">_check_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">_unicode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__client</span> <span class="o">=</span> <span class="n">client</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_manipulators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_copying_manipulators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_manipulators</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_copying_manipulators</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_son_manipulator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">manipulator</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a new son manipulator to this database.</span>
+
+<span class="sd">        **DEPRECATED** - `add_son_manipulator` is deprecated.</span>
+
+<span class="sd">        .. versionchanged:: 3.0</span>
+<span class="sd">          Deprecated add_son_manipulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;add_son_manipulator is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">SONManipulator</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">method_overwritten</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Test if this method has been overridden.&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span>
+                <span class="n">instance</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="vm">__func__</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span><span class="o">.</span><span class="vm">__func__</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">will_copy</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">method_overwritten</span><span class="p">(</span><span class="n">manipulator</span><span class="p">,</span> <span class="s2">&quot;transform_incoming&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_copying_manipulators</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">manipulator</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">method_overwritten</span><span class="p">(</span><span class="n">manipulator</span><span class="p">,</span> <span class="s2">&quot;transform_outgoing&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_copying_manipulators</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">manipulator</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">method_overwritten</span><span class="p">(</span><span class="n">manipulator</span><span class="p">,</span> <span class="s2">&quot;transform_incoming&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_manipulators</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">manipulator</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">method_overwritten</span><span class="p">(</span><span class="n">manipulator</span><span class="p">,</span> <span class="s2">&quot;transform_outgoing&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_manipulators</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">manipulator</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">system_js</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: :class:`SystemJS` helper for this :class:`Database`.</span>
+
+<span class="sd">        See the documentation for :class:`SystemJS` for more details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SystemJS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The client instance for this :class:`Database`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The name of this :class:`Database`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">incoming_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: All incoming SON manipulators.</span>
+
+<span class="sd">        .. versionchanged:: 3.5</span>
+<span class="sd">          Deprecated.</span>
+
+<span class="sd">        .. versionadded:: 2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.incoming_manipulators() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">manipulator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_manipulators</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">incoming_copying_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: All incoming SON copying manipulators.</span>
+
+<span class="sd">        .. versionchanged:: 3.5</span>
+<span class="sd">          Deprecated.</span>
+
+<span class="sd">        .. versionadded:: 2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.incoming_copying_manipulators() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">manipulator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_copying_manipulators</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">outgoing_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: All outgoing SON manipulators.</span>
+
+<span class="sd">        .. versionchanged:: 3.5</span>
+<span class="sd">          Deprecated.</span>
+
+<span class="sd">        .. versionadded:: 2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.outgoing_manipulators() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">manipulator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_manipulators</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">outgoing_copying_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: All outgoing SON copying manipulators.</span>
+
+<span class="sd">        .. versionchanged:: 3.5</span>
+<span class="sd">          Deprecated.</span>
+
+<span class="sd">        .. versionadded:: 2.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.outgoing_copying_manipulators() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">manipulator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_copying_manipulators</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">with_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">codec_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">write_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a clone of this database changing the specified settings.</span>
+
+<span class="sd">          &gt;&gt;&gt; db1.read_preference</span>
+<span class="sd">          Primary()</span>
+<span class="sd">          &gt;&gt;&gt; from pymongo import ReadPreference</span>
+<span class="sd">          &gt;&gt;&gt; db2 = db1.with_options(read_preference=ReadPreference.SECONDARY)</span>
+<span class="sd">          &gt;&gt;&gt; db1.read_preference</span>
+<span class="sd">          Primary()</span>
+<span class="sd">          &gt;&gt;&gt; db2.read_preference</span>
+<span class="sd">          Secondary(tag_sets=None)</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `codec_options` (optional): An instance of</span>
+<span class="sd">            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`codec_options` of this :class:`Collection`</span>
+<span class="sd">            is used.</span>
+<span class="sd">          - `read_preference` (optional): The read preference to use. If</span>
+<span class="sd">            ``None`` (the default) the :attr:`read_preference` of this</span>
+<span class="sd">            :class:`Collection` is used. See :mod:`~pymongo.read_preferences`</span>
+<span class="sd">            for options.</span>
+<span class="sd">          - `write_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`write_concern` of this :class:`Collection`</span>
+<span class="sd">            is used.</span>
+<span class="sd">          - `read_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.read_concern.ReadConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`read_concern` of this :class:`Collection`</span>
+<span class="sd">            is used.</span>
+
+<span class="sd">        .. versionadded:: 3.8</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Database</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span>
+                        <span class="n">codec_options</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">codec_options</span><span class="p">,</span>
+                        <span class="n">read_preference</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_preference</span><span class="p">,</span>
+                        <span class="n">write_concern</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="p">,</span>
+                        <span class="n">read_concern</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_concern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Database</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__client</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">client</span> <span class="ow">and</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span> <span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Database(</span><span class="si">%r</span><span class="s2">, </span><span class="si">%r</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a collection of this database by name.</span>
+
+<span class="sd">        Raises InvalidName if an invalid collection name is used.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the collection to get</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s2">&quot;Database has no attribute </span><span class="si">%r</span><span class="s2">. To access the </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="s2">&quot; collection, use database[</span><span class="si">%r</span><span class="s2">].&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a collection of this database by name.</span>
+
+<span class="sd">        Raises InvalidName if an invalid collection name is used.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the collection to get</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">codec_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">write_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a :class:`~pymongo.collection.Collection` with the given name</span>
+<span class="sd">        and options.</span>
+
+<span class="sd">        Useful for creating a :class:`~pymongo.collection.Collection` with</span>
+<span class="sd">        different codec options, read preference, and/or write concern from</span>
+<span class="sd">        this :class:`Database`.</span>
+
+<span class="sd">          &gt;&gt;&gt; db.read_preference</span>
+<span class="sd">          Primary()</span>
+<span class="sd">          &gt;&gt;&gt; coll1 = db.test</span>
+<span class="sd">          &gt;&gt;&gt; coll1.read_preference</span>
+<span class="sd">          Primary()</span>
+<span class="sd">          &gt;&gt;&gt; from pymongo import ReadPreference</span>
+<span class="sd">          &gt;&gt;&gt; coll2 = db.get_collection(</span>
+<span class="sd">          ...     &#39;test&#39;, read_preference=ReadPreference.SECONDARY)</span>
+<span class="sd">          &gt;&gt;&gt; coll2.read_preference</span>
+<span class="sd">          Secondary(tag_sets=None)</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: The name of the collection - a string.</span>
+<span class="sd">          - `codec_options` (optional): An instance of</span>
+<span class="sd">            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`codec_options` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">          - `read_preference` (optional): The read preference to use. If</span>
+<span class="sd">            ``None`` (the default) the :attr:`read_preference` of this</span>
+<span class="sd">            :class:`Database` is used. See :mod:`~pymongo.read_preferences`</span>
+<span class="sd">            for options.</span>
+<span class="sd">          - `write_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`write_concern` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">          - `read_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.read_concern.ReadConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`read_concern` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Collection</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">codec_options</span><span class="p">,</span> <span class="n">read_preference</span><span class="p">,</span>
+            <span class="n">write_concern</span><span class="p">,</span> <span class="n">read_concern</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">codec_options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">write_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">read_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new :class:`~pymongo.collection.Collection` in this</span>
+<span class="sd">        database.</span>
+
+<span class="sd">        Normally collection creation is automatic. This method should</span>
+<span class="sd">        only be used to specify options on</span>
+<span class="sd">        creation. :class:`~pymongo.errors.CollectionInvalid` will be</span>
+<span class="sd">        raised if the collection already exists.</span>
+
+<span class="sd">        Options should be passed as keyword arguments to this method. Supported</span>
+<span class="sd">        options vary with MongoDB release. Some examples include:</span>
+
+<span class="sd">          - &quot;size&quot;: desired initial size for the collection (in</span>
+<span class="sd">            bytes). For capped collections this size is the max</span>
+<span class="sd">            size of the collection.</span>
+<span class="sd">          - &quot;capped&quot;: if True, this is a capped collection</span>
+<span class="sd">          - &quot;max&quot;: maximum number of objects if capped (optional)</span>
+
+<span class="sd">        See the MongoDB documentation for a full list of supported options by</span>
+<span class="sd">        server version.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the collection to create</span>
+<span class="sd">          - `codec_options` (optional): An instance of</span>
+<span class="sd">            :class:`~bson.codec_options.CodecOptions`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`codec_options` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">          - `read_preference` (optional): The read preference to use. If</span>
+<span class="sd">            ``None`` (the default) the :attr:`read_preference` of this</span>
+<span class="sd">            :class:`Database` is used.</span>
+<span class="sd">          - `write_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.write_concern.WriteConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`write_concern` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">          - `read_concern` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.read_concern.ReadConcern`. If ``None`` (the</span>
+<span class="sd">            default) the :attr:`read_concern` of this :class:`Database` is</span>
+<span class="sd">            used.</span>
+<span class="sd">          - `collation` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.collation.Collation`.</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `**kwargs` (optional): additional keyword arguments will</span>
+<span class="sd">            be passed as options for the create collection command</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. versionchanged:: 3.4</span>
+<span class="sd">           Added the collation option.</span>
+
+<span class="sd">        .. versionchanged:: 3.0</span>
+<span class="sd">           Added the codec_options, read_preference, and write_concern options.</span>
+
+<span class="sd">        .. versionchanged:: 2.2</span>
+<span class="sd">           Removed deprecated argument: options</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_tmp_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_collection_names</span><span class="p">(</span>
+                    <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">},</span> <span class="n">session</span><span class="o">=</span><span class="n">s</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">CollectionInvalid</span><span class="p">(</span><span class="s2">&quot;collection </span><span class="si">%s</span><span class="s2"> already exists&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">Collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">codec_options</span><span class="p">,</span>
+                              <span class="n">read_preference</span><span class="p">,</span> <span class="n">write_concern</span><span class="p">,</span>
+                              <span class="n">read_concern</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_apply_incoming_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply incoming manipulators to `son`.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_manipulators</span><span class="p">:</span>
+            <span class="n">son</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">transform_incoming</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">son</span>
+
+    <span class="k">def</span> <span class="nf">_apply_incoming_copying_manipulators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply incoming copying manipulators to `son`.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__incoming_copying_manipulators</span><span class="p">:</span>
+            <span class="n">son</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">transform_incoming</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">son</span>
+
+    <span class="k">def</span> <span class="nf">_fix_incoming</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply manipulators to an incoming SON object before it gets stored.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `son`: the son object going into the database</span>
+<span class="sd">          - `collection`: the collection the son object is being saved in</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">son</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_incoming_manipulators</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="n">son</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_incoming_copying_manipulators</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">son</span>
+
+    <span class="k">def</span> <span class="nf">_fix_outgoing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply manipulators to a SON object as it comes out of the database.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `son`: the son object coming out of the database</span>
+<span class="sd">          - `collection`: the collection the son object was saved in</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_manipulators</span><span class="p">):</span>
+            <span class="n">son</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">transform_outgoing</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">manipulator</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__outgoing_copying_manipulators</span><span class="p">):</span>
+            <span class="n">son</span> <span class="o">=</span> <span class="n">manipulator</span><span class="o">.</span><span class="n">transform_outgoing</span><span class="p">(</span><span class="n">son</span><span class="p">,</span> <span class="n">collection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">son</span>
+
+    <span class="k">def</span> <span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Perform a database-level aggregation.</span>
+
+<span class="sd">        See the `aggregation pipeline`_ documentation for a list of stages</span>
+<span class="sd">        that are supported.</span>
+
+<span class="sd">        Introduced in MongoDB 3.6.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           # Lists all operations currently running on the server.</span>
+<span class="sd">           with client.admin.aggregate([{&quot;$currentOp&quot;: {}}]) as cursor:</span>
+<span class="sd">               for operation in cursor:</span>
+<span class="sd">                   print(operation)</span>
+
+<span class="sd">        All optional `aggregate command`_ parameters should be passed as</span>
+<span class="sd">        keyword arguments to this method. Valid options include, but are not</span>
+<span class="sd">        limited to:</span>
+
+<span class="sd">          - `allowDiskUse` (bool): Enables writing to temporary files. When set</span>
+<span class="sd">            to True, aggregation stages can write data to the _tmp subdirectory</span>
+<span class="sd">            of the --dbpath directory. The default is False.</span>
+<span class="sd">          - `maxTimeMS` (int): The maximum amount of time to allow the operation</span>
+<span class="sd">            to run in milliseconds.</span>
+<span class="sd">          - `batchSize` (int): The maximum number of documents to return per</span>
+<span class="sd">            batch. Ignored if the connected mongod or mongos does not support</span>
+<span class="sd">            returning aggregate results using a cursor.</span>
+<span class="sd">          - `collation` (optional): An instance of</span>
+<span class="sd">            :class:`~pymongo.collation.Collation`.</span>
+
+<span class="sd">        The :meth:`aggregate` method obeys the :attr:`read_preference` of this</span>
+<span class="sd">        :class:`Database`, except when ``$out`` or ``$merge`` are used, in</span>
+<span class="sd">        which case  :attr:`~pymongo.read_preferences.ReadPreference.PRIMARY`</span>
+<span class="sd">        is used.</span>
+
+<span class="sd">        .. note:: This method does not support the &#39;explain&#39; option. Please</span>
+<span class="sd">           use :meth:`~pymongo.database.Database.command` instead.</span>
+
+<span class="sd">        .. note:: The :attr:`~pymongo.database.Database.write_concern` of</span>
+<span class="sd">           this collection is automatically applied to this operation.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `pipeline`: a list of aggregation pipeline stages</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `**kwargs` (optional): See list of options above.</span>
+
+<span class="sd">        :Returns:</span>
+<span class="sd">          A :class:`~pymongo.command_cursor.CommandCursor` over the result</span>
+<span class="sd">          set.</span>
+
+<span class="sd">        .. versionadded:: 3.9</span>
+
+<span class="sd">        .. _aggregation pipeline:</span>
+<span class="sd">            https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline</span>
+
+<span class="sd">        .. _aggregate command:</span>
+<span class="sd">            https://docs.mongodb.com/manual/reference/command/aggregate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_tmp_session</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">close</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">_DatabaseAggregationCommand</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">CommandCursor</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">user_fields</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cursor&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;firstBatch&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_retryable_read</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="o">.</span><span class="n">get_cursor</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">get_read_preference</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">s</span><span class="p">,</span>
+                <span class="n">retryable</span><span class="o">=</span><span class="ow">not</span> <span class="n">cmd</span><span class="o">.</span><span class="n">_performs_write</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">full_document</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resume_after</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">max_await_time_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">collation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">start_at_operation_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start_after</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Watch changes on this database.</span>
+
+<span class="sd">        Performs an aggregation with an implicit initial ``$changeStream``</span>
+<span class="sd">        stage and returns a</span>
+<span class="sd">        :class:`~pymongo.change_stream.DatabaseChangeStream` cursor which</span>
+<span class="sd">        iterates over changes on all collections in this database.</span>
+
+<span class="sd">        Introduced in MongoDB 4.0.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">           with db.watch() as stream:</span>
+<span class="sd">               for change in stream:</span>
+<span class="sd">                   print(change)</span>
+
+<span class="sd">        The :class:`~pymongo.change_stream.DatabaseChangeStream` iterable</span>
+<span class="sd">        blocks until the next change document is returned or an error is</span>
+<span class="sd">        raised. If the</span>
+<span class="sd">        :meth:`~pymongo.change_stream.DatabaseChangeStream.next` method</span>
+<span class="sd">        encounters a network error when retrieving a batch from the server,</span>
+<span class="sd">        it will automatically attempt to recreate the cursor such that no</span>
+<span class="sd">        change events are missed. Any error encountered during the resume</span>
+<span class="sd">        attempt indicates there may be an outage and will be raised.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            try:</span>
+<span class="sd">                with db.watch(</span>
+<span class="sd">                        [{&#39;$match&#39;: {&#39;operationType&#39;: &#39;insert&#39;}}]) as stream:</span>
+<span class="sd">                    for insert_change in stream:</span>
+<span class="sd">                        print(insert_change)</span>
+<span class="sd">            except pymongo.errors.PyMongoError:</span>
+<span class="sd">                # The ChangeStream encountered an unrecoverable error or the</span>
+<span class="sd">                # resume attempt failed to recreate the cursor.</span>
+<span class="sd">                logging.error(&#39;...&#39;)</span>
+
+<span class="sd">        For a precise description of the resume process see the</span>
+<span class="sd">        `change streams specification`_.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `pipeline` (optional): A list of aggregation pipeline stages to</span>
+<span class="sd">            append to an initial ``$changeStream`` stage. Not all</span>
+<span class="sd">            pipeline stages are valid after a ``$changeStream`` stage, see the</span>
+<span class="sd">            MongoDB documentation on change streams for the supported stages.</span>
+<span class="sd">          - `full_document` (optional): The fullDocument to pass as an option</span>
+<span class="sd">            to the ``$changeStream`` stage. Allowed values: &#39;updateLookup&#39;.</span>
+<span class="sd">            When set to &#39;updateLookup&#39;, the change notification for partial</span>
+<span class="sd">            updates will include both a delta describing the changes to the</span>
+<span class="sd">            document, as well as a copy of the entire document that was</span>
+<span class="sd">            changed from some time after the change occurred.</span>
+<span class="sd">          - `resume_after` (optional): A resume token. If provided, the</span>
+<span class="sd">            change stream will start returning changes that occur directly</span>
+<span class="sd">            after the operation specified in the resume token. A resume token</span>
+<span class="sd">            is the _id value of a change document.</span>
+<span class="sd">          - `max_await_time_ms` (optional): The maximum time in milliseconds</span>
+<span class="sd">            for the server to wait for changes before responding to a getMore</span>
+<span class="sd">            operation.</span>
+<span class="sd">          - `batch_size` (optional): The maximum number of documents to return</span>
+<span class="sd">            per batch.</span>
+<span class="sd">          - `collation` (optional): The :class:`~pymongo.collation.Collation`</span>
+<span class="sd">            to use for the aggregation.</span>
+<span class="sd">          - `start_at_operation_time` (optional): If provided, the resulting</span>
+<span class="sd">            change stream will only return changes that occurred at or after</span>
+<span class="sd">            the specified :class:`~bson.timestamp.Timestamp`. Requires</span>
+<span class="sd">            MongoDB &gt;= 4.0.</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `start_after` (optional): The same as `resume_after` except that</span>
+<span class="sd">            `start_after` can resume notifications after an invalidate event.</span>
+<span class="sd">            This option and `resume_after` are mutually exclusive.</span>
+
+<span class="sd">        :Returns:</span>
+<span class="sd">          A :class:`~pymongo.change_stream.DatabaseChangeStream` cursor.</span>
+
+<span class="sd">        .. versionchanged:: 3.9</span>
+<span class="sd">           Added the ``start_after`` parameter.</span>
+
+<span class="sd">        .. versionadded:: 3.7</span>
+
+<span class="sd">        .. mongodoc:: changeStreams</span>
+
+<span class="sd">        .. _change streams specification:</span>
+<span class="sd">            https://github.com/mongodb/specifications/blob/master/source/change-streams/change-streams.rst</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">DatabaseChangeStream</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">full_document</span><span class="p">,</span> <span class="n">resume_after</span><span class="p">,</span> <span class="n">max_await_time_ms</span><span class="p">,</span>
+            <span class="n">batch_size</span><span class="p">,</span> <span class="n">collation</span><span class="p">,</span> <span class="n">start_at_operation_time</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span>
+            <span class="n">start_after</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock_info</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">slave_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">allowable_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="n">ReadPreference</span><span class="o">.</span><span class="n">PRIMARY</span><span class="p">,</span>
+                 <span class="n">codec_options</span><span class="o">=</span><span class="n">DEFAULT_CODEC_OPTIONS</span><span class="p">,</span>
+                 <span class="n">write_concern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">parse_write_concern_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Internal command helper.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="n">SON</span><span class="p">([(</span><span class="n">command</span><span class="p">,</span> <span class="n">value</span><span class="p">)])</span>
+
+        <span class="n">command</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_tmp_session</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sock_info</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span>
+                <span class="n">command</span><span class="p">,</span>
+                <span class="n">slave_ok</span><span class="p">,</span>
+                <span class="n">read_preference</span><span class="p">,</span>
+                <span class="n">codec_options</span><span class="p">,</span>
+                <span class="n">check</span><span class="p">,</span>
+                <span class="n">allowable_errors</span><span class="p">,</span>
+                <span class="n">write_concern</span><span class="o">=</span><span class="n">write_concern</span><span class="p">,</span>
+                <span class="n">parse_write_concern_error</span><span class="o">=</span><span class="n">parse_write_concern_error</span><span class="p">,</span>
+                <span class="n">session</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+                <span class="n">client</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">allowable_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">codec_options</span><span class="o">=</span><span class="n">DEFAULT_CODEC_OPTIONS</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Issue a MongoDB command.</span>
+
+<span class="sd">        Send command `command` to the database and return the</span>
+<span class="sd">        response. If `command` is an instance of :class:`basestring`</span>
+<span class="sd">        (:class:`str` in python 3) then the command {`command`: `value`}</span>
+<span class="sd">        will be sent. Otherwise, `command` must be an instance of</span>
+<span class="sd">        :class:`dict` and will be sent as is.</span>
+
+<span class="sd">        Any additional keyword arguments will be added to the final</span>
+<span class="sd">        command document before it is sent.</span>
+
+<span class="sd">        For example, a command like ``{buildinfo: 1}`` can be sent</span>
+<span class="sd">        using:</span>
+
+<span class="sd">        &gt;&gt;&gt; db.command(&quot;buildinfo&quot;)</span>
+
+<span class="sd">        For a command where the value matters, like ``{collstats:</span>
+<span class="sd">        collection_name}`` we can do:</span>
+
+<span class="sd">        &gt;&gt;&gt; db.command(&quot;collstats&quot;, collection_name)</span>
+
+<span class="sd">        For commands that take additional arguments we can use</span>
+<span class="sd">        kwargs. So ``{filemd5: object_id, root: file_root}`` becomes:</span>
+
+<span class="sd">        &gt;&gt;&gt; db.command(&quot;filemd5&quot;, object_id, root=file_root)</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `command`: document representing the command to be issued,</span>
+<span class="sd">            or the name of the command (for simple commands only).</span>
+
+<span class="sd">            .. note:: the order of keys in the `command` document is</span>
+<span class="sd">               significant (the &quot;verb&quot; must come first), so commands</span>
+<span class="sd">               which require multiple keys (e.g. `findandmodify`)</span>
+<span class="sd">               should use an instance of :class:`~bson.son.SON` or</span>
+<span class="sd">               a string and kwargs instead of a Python `dict`.</span>
+
+<span class="sd">          - `value` (optional): value to use for the command verb when</span>
+<span class="sd">            `command` is passed as a string</span>
+<span class="sd">          - `check` (optional): check the response for errors, raising</span>
+<span class="sd">            :class:`~pymongo.errors.OperationFailure` if there are any</span>
+<span class="sd">          - `allowable_errors`: if `check` is ``True``, error messages</span>
+<span class="sd">            in this list will be ignored by error-checking</span>
+<span class="sd">          - `read_preference` (optional): The read preference for this</span>
+<span class="sd">            operation. See :mod:`~pymongo.read_preferences` for options.</span>
+<span class="sd">            If the provided `session` is in a transaction, defaults to the</span>
+<span class="sd">            read preference configured for the transaction.</span>
+<span class="sd">            Otherwise, defaults to</span>
+<span class="sd">            :attr:`~pymongo.read_preferences.ReadPreference.PRIMARY`.</span>
+<span class="sd">          - `codec_options`: A :class:`~bson.codec_options.CodecOptions`</span>
+<span class="sd">            instance.</span>
+<span class="sd">          - `session` (optional): A</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `**kwargs` (optional): additional keyword arguments will</span>
+<span class="sd">            be added to the command document before it is sent</span>
+
+<span class="sd">        .. note:: :meth:`command` does **not** obey this Database&#39;s</span>
+<span class="sd">           :attr:`read_preference` or :attr:`codec_options`. You must use the</span>
+<span class="sd">           `read_preference` and `codec_options` parameters instead.</span>
+
+<span class="sd">        .. note:: :meth:`command` does **not** apply any custom TypeDecoders</span>
+<span class="sd">           when decoding the command response.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. versionchanged:: 3.0</span>
+<span class="sd">           Removed the `as_class`, `fields`, `uuid_subtype`, `tag_sets`,</span>
+<span class="sd">           and `secondary_acceptable_latency_ms` option.</span>
+<span class="sd">           Removed `compile_re` option: PyMongo now always represents BSON</span>
+<span class="sd">           regular expressions as :class:`~bson.regex.Regex` objects. Use</span>
+<span class="sd">           :meth:`~bson.regex.Regex.try_compile` to attempt to convert from a</span>
+<span class="sd">           BSON regular expression to a Python regular expression object.</span>
+<span class="sd">           Added the `codec_options` parameter.</span>
+
+<span class="sd">        .. versionchanged:: 2.7</span>
+<span class="sd">           Added `compile_re` option. If set to False, PyMongo represented BSON</span>
+<span class="sd">           regular expressions as :class:`~bson.regex.Regex` objects instead of</span>
+<span class="sd">           attempting to compile BSON regular expressions as Python native</span>
+<span class="sd">           regular expressions, thus preventing errors for some incompatible</span>
+<span class="sd">           patterns, see `PYTHON-500`_.</span>
+
+<span class="sd">        .. versionchanged:: 2.3</span>
+<span class="sd">           Added `tag_sets` and `secondary_acceptable_latency_ms` options.</span>
+<span class="sd">        .. versionchanged:: 2.2</span>
+<span class="sd">           Added support for `as_class` - the class you want to use for</span>
+<span class="sd">           the resulting documents</span>
+
+<span class="sd">        .. _PYTHON-500: https://jira.mongodb.org/browse/PYTHON-500</span>
+
+<span class="sd">        .. mongodoc:: commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">read_preference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">read_preference</span> <span class="o">=</span> <span class="p">((</span><span class="n">session</span> <span class="ow">and</span> <span class="n">session</span><span class="o">.</span><span class="n">_txn_read_preference</span><span class="p">())</span>
+                               <span class="ow">or</span> <span class="n">ReadPreference</span><span class="o">.</span><span class="n">PRIMARY</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_socket_for_reads</span><span class="p">(</span>
+                <span class="n">read_preference</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">sock_info</span><span class="p">,</span> <span class="n">slave_ok</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span><span class="n">sock_info</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">slave_ok</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span>
+                                 <span class="n">check</span><span class="p">,</span> <span class="n">allowable_errors</span><span class="p">,</span> <span class="n">read_preference</span><span class="p">,</span>
+                                 <span class="n">codec_options</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_retryable_read_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">allowable_errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">codec_options</span><span class="o">=</span><span class="n">DEFAULT_CODEC_OPTIONS</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Same as command but used for retryable read commands.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">read_preference</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">read_preference</span> <span class="o">=</span> <span class="p">((</span><span class="n">session</span> <span class="ow">and</span> <span class="n">session</span><span class="o">.</span><span class="n">_txn_read_preference</span><span class="p">())</span>
+                               <span class="ow">or</span> <span class="n">ReadPreference</span><span class="o">.</span><span class="n">PRIMARY</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_cmd</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sock_info</span><span class="p">,</span> <span class="n">slave_ok</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span><span class="n">sock_info</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">slave_ok</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span>
+                                 <span class="n">check</span><span class="p">,</span> <span class="n">allowable_errors</span><span class="p">,</span> <span class="n">read_preference</span><span class="p">,</span>
+                                 <span class="n">codec_options</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_retryable_read</span><span class="p">(</span>
+            <span class="n">_cmd</span><span class="p">,</span> <span class="n">read_preference</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_list_collections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock_info</span><span class="p">,</span> <span class="n">slave_okay</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span>
+                          <span class="n">read_preference</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Internal listCollections helper.&quot;&quot;&quot;</span>
+
+        <span class="n">coll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_collection</span><span class="p">(</span>
+            <span class="s2">&quot;$cmd&quot;</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="n">read_preference</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sock_info</span><span class="o">.</span><span class="n">max_wire_version</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">SON</span><span class="p">([(</span><span class="s2">&quot;listCollections&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                       <span class="p">(</span><span class="s2">&quot;cursor&quot;</span><span class="p">,</span> <span class="p">{})])</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_tmp_session</span><span class="p">(</span>
+                    <span class="n">session</span><span class="p">,</span> <span class="n">close</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp_session</span><span class="p">:</span>
+                <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span>
+                    <span class="n">sock_info</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">slave_okay</span><span class="p">,</span>
+                    <span class="n">read_preference</span><span class="o">=</span><span class="n">read_preference</span><span class="p">,</span>
+                    <span class="n">session</span><span class="o">=</span><span class="n">tmp_session</span><span class="p">)[</span><span class="s2">&quot;cursor&quot;</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">CommandCursor</span><span class="p">(</span>
+                    <span class="n">coll</span><span class="p">,</span>
+                    <span class="n">cursor</span><span class="p">,</span>
+                    <span class="n">sock_info</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+                    <span class="n">session</span><span class="o">=</span><span class="n">tmp_session</span><span class="p">,</span>
+                    <span class="n">explicit_session</span><span class="o">=</span><span class="n">session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">_INDEX_REGEX</span>
+            <span class="k">if</span> <span class="s2">&quot;filter&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$and&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_INDEX_REGEX</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]]}</span>
+            <span class="n">dblen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;$project&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$substr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;$name&quot;</span><span class="p">,</span> <span class="n">dblen</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]},</span>
+                              <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}},</span>
+                <span class="p">{</span><span class="s2">&quot;$match&quot;</span><span class="p">:</span> <span class="n">match</span><span class="p">}</span>
+            <span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="n">SON</span><span class="p">([(</span><span class="s2">&quot;aggregate&quot;</span><span class="p">,</span> <span class="s2">&quot;system.namespaces&quot;</span><span class="p">),</span>
+                       <span class="p">(</span><span class="s2">&quot;pipeline&quot;</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">),</span>
+                       <span class="p">(</span><span class="s2">&quot;cursor&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cursor&quot;</span><span class="p">,</span> <span class="p">{}))])</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span><span class="n">sock_info</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">slave_okay</span><span class="p">)[</span><span class="s2">&quot;cursor&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">CommandCursor</span><span class="p">(</span><span class="n">coll</span><span class="p">,</span> <span class="n">cursor</span><span class="p">,</span> <span class="n">sock_info</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">list_collections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a cursor over the collectons of this database.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `filter` (optional):  A query document to filter the list of</span>
+<span class="sd">            collections returned from the listCollections command.</span>
+<span class="sd">          - `**kwargs` (optional): Optional parameters of the</span>
+<span class="sd">            `listCollections command</span>
+<span class="sd">            &lt;https://docs.mongodb.com/manual/reference/command/listCollections/&gt;`_</span>
+<span class="sd">            can be passed as keyword arguments to this method. The supported</span>
+<span class="sd">            options differ by server version.</span>
+
+<span class="sd">        :Returns:</span>
+<span class="sd">          An instance of :class:`~pymongo.command_cursor.CommandCursor`.</span>
+
+<span class="sd">        .. versionadded:: 3.6</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
+        <span class="n">read_pref</span> <span class="o">=</span> <span class="p">((</span><span class="n">session</span> <span class="ow">and</span> <span class="n">session</span><span class="o">.</span><span class="n">_txn_read_preference</span><span class="p">())</span>
+                     <span class="ow">or</span> <span class="n">ReadPreference</span><span class="o">.</span><span class="n">PRIMARY</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">_cmd</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">sock_info</span><span class="p">,</span> <span class="n">slave_okay</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_collections</span><span class="p">(</span>
+                <span class="n">sock_info</span><span class="p">,</span> <span class="n">slave_okay</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">read_preference</span><span class="o">=</span><span class="n">read_pref</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_retryable_read</span><span class="p">(</span>
+            <span class="n">_cmd</span><span class="p">,</span> <span class="n">read_pref</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">list_collection_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of all the collection names in this database.</span>
+
+<span class="sd">        For example, to list all non-system collections::</span>
+
+<span class="sd">            filter = {&quot;name&quot;: {&quot;$regex&quot;: r&quot;^(?!system\\.)&quot;}}</span>
+<span class="sd">            db.list_collection_names(filter=filter)</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `filter` (optional):  A query document to filter the list of</span>
+<span class="sd">            collections returned from the listCollections command.</span>
+<span class="sd">          - `**kwargs` (optional): Optional parameters of the</span>
+<span class="sd">            `listCollections command</span>
+<span class="sd">            &lt;https://docs.mongodb.com/manual/reference/command/listCollections/&gt;`_</span>
+<span class="sd">            can be passed as keyword arguments to this method. The supported</span>
+<span class="sd">            options differ by server version.</span>
+
+<span class="sd">        .. versionchanged:: 3.8</span>
+<span class="sd">           Added the ``filter`` and ``**kwargs`` parameters.</span>
+
+<span class="sd">        .. versionadded:: 3.6</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;nameOnly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The enumerate collections spec states that &quot;drivers MUST NOT set</span>
+            <span class="c1"># nameOnly if a filter specifies any keys other than name.&quot;</span>
+            <span class="n">common</span><span class="o">.</span><span class="n">validate_is_mapping</span><span class="p">(</span><span class="s2">&quot;filter&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;filter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">filter</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;nameOnly&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">collection_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_system_collections</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get a list of all the collection names in this</span>
+<span class="sd">        database.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `include_system_collections` (optional): if ``False`` list</span>
+<span class="sd">            will not include system collections (e.g ``system.indexes``)</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.7</span>
+<span class="sd">           Deprecated. Use :meth:`list_collection_names` instead.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;collection_names is deprecated. Use &quot;</span>
+                      <span class="s2">&quot;list_collection_names instead.&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">kws</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">include_system_collections</span> <span class="k">else</span> <span class="n">_SYSTEM_FILTER</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_collections</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+                                                    <span class="n">nameOnly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">drop_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_or_collection</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Drop a collection.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name_or_collection`: the name of a collection to drop or the</span>
+<span class="sd">            collection object itself</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. note:: The :attr:`~pymongo.database.Database.write_concern` of</span>
+<span class="sd">           this database is automatically applied to this operation when using</span>
+<span class="sd">           MongoDB &gt;= 3.4.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. versionchanged:: 3.4</span>
+<span class="sd">           Apply this database&#39;s write concern automatically to this operation</span>
+<span class="sd">           when connected to MongoDB &gt;= 3.4.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name_or_collection</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name_or_collection must be an &quot;</span>
+                            <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_purge_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_socket_for_writes</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">sock_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span>
+                <span class="n">sock_info</span><span class="p">,</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">_unicode</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">allowable_errors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ns not found&#39;</span><span class="p">],</span>
+                <span class="n">write_concern</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_write_concern_for</span><span class="p">(</span><span class="n">session</span><span class="p">),</span>
+                <span class="n">parse_write_concern_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">validate_collection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_or_collection</span><span class="p">,</span>
+                            <span class="n">scandata</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Validate a collection.</span>
+
+<span class="sd">        Returns a dict of validation info. Raises CollectionInvalid if</span>
+<span class="sd">        validation fails.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name_or_collection`: A Collection object or the name of a</span>
+<span class="sd">            collection to validate.</span>
+<span class="sd">          - `scandata`: Do extra checks beyond checking the overall</span>
+<span class="sd">            structure of the collection.</span>
+<span class="sd">          - `full`: Have the server do a more thorough scan of the</span>
+<span class="sd">            collection. Use with `scandata` for a thorough scan</span>
+<span class="sd">            of the structure of the collection and the individual</span>
+<span class="sd">            documents.</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name_or_collection</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name_or_collection must be an instance of &quot;</span>
+                            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> or Collection&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;validate&quot;</span><span class="p">,</span> <span class="n">_unicode</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                              <span class="n">scandata</span><span class="o">=</span><span class="n">scandata</span><span class="p">,</span> <span class="n">full</span><span class="o">=</span><span class="n">full</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+
+        <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Pre 1.9 results</span>
+        <span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;exception&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">info</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;corrupt&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">CollectionInvalid</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> invalid: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span>
+        <span class="c1"># Sharded results</span>
+        <span class="k">elif</span> <span class="s2">&quot;raw&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">iteritems</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;raw&quot;</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+                    <span class="n">info</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;exception&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span>
+                            <span class="n">info</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;corrupt&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="n">CollectionInvalid</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> invalid: &quot;</span>
+                                                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+        <span class="c1"># Post 1.9 non-sharded results.</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">CollectionInvalid</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> invalid: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">_current_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper for running $currentOp.&quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">SON</span><span class="p">([(</span><span class="s2">&quot;currentOp&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;$all&quot;</span><span class="p">,</span> <span class="n">include_all</span><span class="p">)])</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_socket_for_writes</span><span class="p">(</span><span class="n">session</span><span class="p">)</span> <span class="k">as</span> <span class="n">sock_info</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sock_info</span><span class="o">.</span><span class="n">max_wire_version</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">admin</span><span class="o">.</span><span class="n">_command</span><span class="p">(</span>
+                    <span class="n">sock_info</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">codec_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">codec_options</span><span class="p">,</span>
+                    <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;$all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="n">include_all</span> <span class="k">else</span> <span class="p">{}</span>
+                <span class="k">return</span> <span class="n">_first_batch</span><span class="p">(</span><span class="n">sock_info</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="s2">&quot;$cmd.sys.inprog&quot;</span><span class="p">,</span>
+                                    <span class="n">spec</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">codec_options</span><span class="p">,</span>
+                                    <span class="n">ReadPreference</span><span class="o">.</span><span class="n">PRIMARY</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_event_listeners</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">current_op</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get information on operations currently running.</span>
+
+<span class="sd">        Starting with MongoDB 3.6 this helper is obsolete. The functionality</span>
+<span class="sd">        provided by this helper is available in MongoDB 3.6+ using the</span>
+<span class="sd">        `$currentOp aggregation pipeline stage`_, which can be used with</span>
+<span class="sd">        :meth:`aggregate`. Note that, while this helper can only return</span>
+<span class="sd">        a single document limited to a 16MB result, :meth:`aggregate`</span>
+<span class="sd">        returns a cursor avoiding that limitation.</span>
+
+<span class="sd">        Users of MongoDB versions older than 3.6 can use the `currentOp command`_</span>
+<span class="sd">        directly::</span>
+
+<span class="sd">          # MongoDB 3.2 and 3.4</span>
+<span class="sd">          client.admin.command(&quot;currentOp&quot;)</span>
+
+<span class="sd">        Or query the &quot;inprog&quot; virtual collection::</span>
+
+<span class="sd">          # MongoDB 2.6 and 3.0</span>
+<span class="sd">          client.admin[&quot;$cmd.sys.inprog&quot;].find_one()</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `include_all` (optional): if ``True`` also list currently</span>
+<span class="sd">            idle operations in the result</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.9</span>
+<span class="sd">           Deprecated.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. _$currentOp aggregation pipeline stage: https://docs.mongodb.com/manual/reference/operator/aggregation/currentOp/</span>
+<span class="sd">        .. _currentOp command: https://docs.mongodb.com/manual/reference/command/currentOp/</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;current_op() is deprecated. See the documentation for &quot;</span>
+                      <span class="s2">&quot;more information&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_op</span><span class="p">(</span><span class="n">include_all</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">profiling_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the database&#39;s current profiling level.</span>
+
+<span class="sd">        Returns one of (:data:`~pymongo.OFF`,</span>
+<span class="sd">        :data:`~pymongo.SLOW_ONLY`, :data:`~pymongo.ALL`).</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. mongodoc:: profiling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;was&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;was&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;was&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">set_profiling_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">slow_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the database&#39;s profiling level.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `level`: Specifies a profiling level, see list of possible values</span>
+<span class="sd">            below.</span>
+<span class="sd">          - `slow_ms`: Optionally modify the threshold for the profile to</span>
+<span class="sd">            consider a query or operation.  Even if the profiler is off queries</span>
+<span class="sd">            slower than the `slow_ms` level will get written to the logs.</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        Possible `level` values:</span>
+
+<span class="sd">        +----------------------------+------------------------------------+</span>
+<span class="sd">        | Level                      | Setting                            |</span>
+<span class="sd">        +============================+====================================+</span>
+<span class="sd">        | :data:`~pymongo.OFF`       | Off. No profiling.                 |</span>
+<span class="sd">        +----------------------------+------------------------------------+</span>
+<span class="sd">        | :data:`~pymongo.SLOW_ONLY` | On. Only includes slow operations. |</span>
+<span class="sd">        +----------------------------+------------------------------------+</span>
+<span class="sd">        | :data:`~pymongo.ALL`       | On. Includes all operations.       |</span>
+<span class="sd">        +----------------------------+------------------------------------+</span>
+
+<span class="sd">        Raises :class:`ValueError` if level is not one of</span>
+<span class="sd">        (:data:`~pymongo.OFF`, :data:`~pymongo.SLOW_ONLY`,</span>
+<span class="sd">        :data:`~pymongo.ALL`).</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. mongodoc:: profiling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">level</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;level must be one of (OFF, SLOW_ONLY, ALL)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">slow_ms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slow_ms</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;slow_ms must be an integer&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">slow_ms</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">slowms</span><span class="o">=</span><span class="n">slow_ms</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;profile&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">profiling_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list containing current profiling information.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+
+<span class="sd">        .. mongodoc:: profiling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;system.profile&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get the error if one occurred on the last operation.</span>
+
+<span class="sd">        This method is obsolete: all MongoDB write operations (insert, update,</span>
+<span class="sd">        remove, and so on) use the write concern ``w=1`` and report their</span>
+<span class="sd">        errors by default.</span>
+
+<span class="sd">        .. versionchanged:: 2.8</span>
+<span class="sd">           Deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.error() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;getlasterror&quot;</span><span class="p">)</span>
+        <span class="n">error_msg</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;err&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">error_msg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">error_msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;not master&quot;</span><span class="p">):</span>
+            <span class="c1"># Reset primary server and request check, if another thread isn&#39;t</span>
+            <span class="c1"># doing so already.</span>
+            <span class="n">primary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">primary</span>
+            <span class="k">if</span> <span class="n">primary</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="n">_reset_server_and_request_check</span><span class="p">(</span><span class="n">primary</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">error</span>
+
+    <span class="k">def</span> <span class="nf">last_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get status information from the last operation.</span>
+
+<span class="sd">        This method is obsolete: all MongoDB write operations (insert, update,</span>
+<span class="sd">        remove, and so on) use the write concern ``w=1`` and report their</span>
+<span class="sd">        errors by default.</span>
+
+<span class="sd">        Returns a SON object with status information.</span>
+
+<span class="sd">        .. versionchanged:: 2.8</span>
+<span class="sd">           Deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;last_status() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;getlasterror&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">previous_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get the most recent error on this database.</span>
+
+<span class="sd">        This method is obsolete: all MongoDB write operations (insert, update,</span>
+<span class="sd">        remove, and so on) use the write concern ``w=1`` and report their</span>
+<span class="sd">        errors by default.</span>
+
+<span class="sd">        Only returns errors that have occurred since the last call to</span>
+<span class="sd">        :meth:`reset_error_history`. Returns None if no such errors have</span>
+<span class="sd">        occurred.</span>
+
+<span class="sd">        .. versionchanged:: 2.8</span>
+<span class="sd">           Deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;previous_error() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;getpreverror&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;err&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">error</span>
+
+    <span class="k">def</span> <span class="nf">reset_error_history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Reset the error history of this database.</span>
+
+<span class="sd">        This method is obsolete: all MongoDB write operations (insert, update,</span>
+<span class="sd">        remove, and so on) use the write concern ``w=1`` and report their</span>
+<span class="sd">        errors by default.</span>
+
+<span class="sd">        Calls to :meth:`previous_error` will only return errors that have</span>
+<span class="sd">        occurred since the most recent call to this method.</span>
+
+<span class="sd">        .. versionchanged:: 2.8</span>
+<span class="sd">           Deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;reset_error_history() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;reseterror&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&#39;Database&#39; object is not iterable&quot;</span><span class="p">)</span>
+
+    <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>
+
+    <span class="k">def</span> <span class="nf">_default_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read_only</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the default user role for this database.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">read_only</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;readAnyDatabase&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;root&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">read_only</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;read&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;dbOwner&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_create_or_update_user</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">create</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">read_only</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Use a command to create (if create=True) or modify a user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">opts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">read_only</span> <span class="ow">or</span> <span class="p">(</span><span class="n">create</span> <span class="ow">and</span> <span class="s2">&quot;roles&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Creating a user with the read_only option &quot;</span>
+                          <span class="s2">&quot;or without roles is deprecated in MongoDB &quot;</span>
+                          <span class="s2">&quot;&gt;= 2.6&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;roles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_role</span><span class="p">(</span><span class="n">read_only</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">read_only</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;The read_only option is deprecated in MongoDB &quot;</span>
+                          <span class="s2">&quot;&gt;= 2.6, use &#39;roles&#39; instead&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;digestPassword&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s2">&quot;The digestPassword option is not &quot;</span>
+                                         <span class="s2">&quot;supported via add_user. Please use &quot;</span>
+                                         <span class="s2">&quot;db.command(&#39;createUser&#39;, ...) &quot;</span>
+                                         <span class="s2">&quot;instead for this option.&quot;</span><span class="p">)</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pwd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">password</span>
+
+        <span class="c1"># Don&#39;t send {} as writeConcern.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">acknowledged</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">document</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;writeConcern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">document</span>
+        <span class="n">opts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">create</span><span class="p">:</span>
+            <span class="n">command_name</span> <span class="o">=</span> <span class="s2">&quot;createUser&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command_name</span> <span class="o">=</span> <span class="s2">&quot;updateUser&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">command_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Create user `name` with password `password`.</span>
+
+<span class="sd">        Add a new user with permissions for this :class:`Database`.</span>
+
+<span class="sd">        .. note:: Will change the password if user `name` already exists.</span>
+
+<span class="sd">        .. note:: add_user is deprecated and will be removed in PyMongo</span>
+<span class="sd">          4.0. Starting with MongoDB 2.6 user management is handled with four</span>
+<span class="sd">          database commands, createUser_, usersInfo_, updateUser_, and</span>
+<span class="sd">          dropUser_.</span>
+
+<span class="sd">          To create a user::</span>
+
+<span class="sd">            db.command(&quot;createUser&quot;, &quot;admin&quot;, pwd=&quot;password&quot;, roles=[&quot;root&quot;])</span>
+
+<span class="sd">          To create a read-only user::</span>
+
+<span class="sd">            db.command(&quot;createUser&quot;, &quot;user&quot;, pwd=&quot;password&quot;, roles=[&quot;read&quot;])</span>
+
+<span class="sd">          To change a password::</span>
+
+<span class="sd">            db.command(&quot;updateUser&quot;, &quot;user&quot;, pwd=&quot;newpassword&quot;)</span>
+
+<span class="sd">          Or change roles::</span>
+
+<span class="sd">            db.command(&quot;updateUser&quot;, &quot;user&quot;, roles=[&quot;readWrite&quot;])</span>
+
+<span class="sd">        .. _createUser: https://docs.mongodb.com/manual/reference/command/createUser/</span>
+<span class="sd">        .. _usersInfo: https://docs.mongodb.com/manual/reference/command/usersInfo/</span>
+<span class="sd">        .. _updateUser: https://docs.mongodb.com/manual/reference/command/updateUser/</span>
+<span class="sd">        .. _dropUser: https://docs.mongodb.com/manual/reference/command/createUser/</span>
+
+<span class="sd">        .. warning:: Never create or modify users over an insecure network without</span>
+<span class="sd">          the use of TLS. See :doc:`/examples/tls` for more information.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the user to create</span>
+<span class="sd">          - `password` (optional): the password of the user to create. Can not</span>
+<span class="sd">            be used with the ``userSource`` argument.</span>
+<span class="sd">          - `read_only` (optional): if ``True`` the user will be read only</span>
+<span class="sd">          - `**kwargs` (optional): optional fields for the user document</span>
+<span class="sd">            (e.g. ``userSource``, ``otherDBRoles``, or ``roles``). See</span>
+<span class="sd">            `&lt;http://docs.mongodb.org/manual/reference/privilege-documents&gt;`_</span>
+<span class="sd">            for more information.</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.7</span>
+<span class="sd">           Added support for SCRAM-SHA-256 users with MongoDB 4.0 and later.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter. Deprecated add_user.</span>
+
+<span class="sd">        .. versionchanged:: 2.5</span>
+<span class="sd">           Added kwargs support for optional fields introduced in MongoDB 2.4</span>
+
+<span class="sd">        .. versionchanged:: 2.2</span>
+<span class="sd">           Added support for read only users</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;add_user is deprecated and will be removed in PyMongo &quot;</span>
+                      <span class="s2">&quot;4.0. Use db.command with createUser or updateUser &quot;</span>
+                      <span class="s2">&quot;instead&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name must be an &quot;</span>
+                            <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;password must be an &quot;</span>
+                                <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;password can&#39;t be empty&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">read_only</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">read_only</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">validate_boolean</span><span class="p">(</span><span class="s1">&#39;read_only&#39;</span><span class="p">,</span> <span class="n">read_only</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;roles&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s2">&quot;Can not use &quot;</span>
+                                         <span class="s2">&quot;read_only and roles together&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">uinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;usersInfo&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+            <span class="c1"># Create the user if not found in uinfo, otherwise update one.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_or_update_user</span><span class="p">(</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="n">uinfo</span><span class="p">[</span><span class="s2">&quot;users&quot;</span><span class="p">]),</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">read_only</span><span class="p">,</span>
+                <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">OperationFailure</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="c1"># Unauthorized. Attempt to create the user in case of</span>
+            <span class="c1"># localhost exception.</span>
+            <span class="k">if</span> <span class="n">exc</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">13</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_or_update_user</span><span class="p">(</span>
+                    <span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">read_only</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+    <span class="k">def</span> <span class="nf">remove_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Remove user `name` from this :class:`Database`.</span>
+
+<span class="sd">        User `name` will no longer have permissions to access this</span>
+<span class="sd">        :class:`Database`.</span>
+
+<span class="sd">        .. note:: remove_user is deprecated and will be removed in PyMongo</span>
+<span class="sd">          4.0. Use the dropUser command instead::</span>
+
+<span class="sd">            db.command(&quot;dropUser&quot;, &quot;user&quot;)</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the user to remove</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter. Deprecated remove_user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;remove_user is deprecated and will be removed in &quot;</span>
+                      <span class="s2">&quot;PyMongo 4.0. Use db.command with dropUser &quot;</span>
+                      <span class="s2">&quot;instead&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">SON</span><span class="p">([(</span><span class="s2">&quot;dropUser&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)])</span>
+        <span class="c1"># Don&#39;t send {} as writeConcern.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">acknowledged</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">document</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="p">[</span><span class="s2">&quot;writeConcern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">document</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mechanism</span><span class="o">=</span><span class="s1">&#39;DEFAULT&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Authenticate to use this database.</span>
+
+<span class="sd">        .. warning:: Starting in MongoDB 3.6, calling :meth:`authenticate`</span>
+<span class="sd">          invalidates all existing cursors. It may also leave logical sessions</span>
+<span class="sd">          open on the server for up to 30 minutes until they time out.</span>
+
+<span class="sd">        Authentication lasts for the life of the underlying client</span>
+<span class="sd">        instance, or until :meth:`logout` is called.</span>
+
+<span class="sd">        Raises :class:`TypeError` if (required) `name`, (optional) `password`,</span>
+<span class="sd">        or (optional) `source` is not an instance of :class:`basestring`</span>
+<span class="sd">        (:class:`str` in python 3).</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">          - This method authenticates the current connection, and</span>
+<span class="sd">            will also cause all new :class:`~socket.socket` connections</span>
+<span class="sd">            in the underlying client instance to be authenticated automatically.</span>
+
+<span class="sd">          - Authenticating more than once on the same database with different</span>
+<span class="sd">            credentials is not supported. You must call :meth:`logout` before</span>
+<span class="sd">            authenticating with new credentials.</span>
+
+<span class="sd">          - When sharing a client instance between multiple threads, all</span>
+<span class="sd">            threads will share the authentication. If you need different</span>
+<span class="sd">            authentication profiles for different purposes you must use</span>
+<span class="sd">            distinct client instances.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `name`: the name of the user to authenticate. Optional when</span>
+<span class="sd">            `mechanism` is MONGODB-X509 and the MongoDB server version is</span>
+<span class="sd">            &gt;= 3.4.</span>
+<span class="sd">          - `password` (optional): the password of the user to authenticate.</span>
+<span class="sd">            Not used with GSSAPI or MONGODB-X509 authentication.</span>
+<span class="sd">          - `source` (optional): the database to authenticate on. If not</span>
+<span class="sd">            specified the current database is used.</span>
+<span class="sd">          - `mechanism` (optional): See :data:`~pymongo.auth.MECHANISMS` for</span>
+<span class="sd">            options. If no mechanism is specified, PyMongo automatically uses</span>
+<span class="sd">            MONGODB-CR when connected to a pre-3.0 version of MongoDB,</span>
+<span class="sd">            SCRAM-SHA-1 when connected to MongoDB 3.0 through 3.6, and</span>
+<span class="sd">            negotiates the mechanism to use (SCRAM-SHA-1 or SCRAM-SHA-256) when</span>
+<span class="sd">            connected to MongoDB 4.0+.</span>
+<span class="sd">          - `authMechanismProperties` (optional): Used to specify</span>
+<span class="sd">            authentication mechanism specific options. To specify the service</span>
+<span class="sd">            name for GSSAPI authentication pass</span>
+<span class="sd">            authMechanismProperties=&#39;SERVICE_NAME:&lt;service name&gt;&#39;</span>
+
+<span class="sd">        .. versionchanged:: 3.7</span>
+<span class="sd">           Added support for SCRAM-SHA-256 with MongoDB 4.0 and later.</span>
+
+<span class="sd">        .. versionchanged:: 3.5</span>
+<span class="sd">           Deprecated. Authenticating multiple users conflicts with support for</span>
+<span class="sd">           logical sessions in MongoDB 3.6. To authenticate as multiple users,</span>
+<span class="sd">           create multiple instances of MongoClient.</span>
+
+<span class="sd">        .. versionadded:: 2.8</span>
+<span class="sd">           Use SCRAM-SHA-1 with MongoDB 3.0 and later.</span>
+
+<span class="sd">        .. versionchanged:: 2.5</span>
+<span class="sd">           Added the `source` and `mechanism` parameters. :meth:`authenticate`</span>
+<span class="sd">           now raises a subclass of :class:`~pymongo.errors.PyMongoError` if</span>
+<span class="sd">           authentication fails due to invalid credentials or configuration</span>
+<span class="sd">           issues.</span>
+
+<span class="sd">        .. mongodoc:: authenticate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;name must be an &quot;</span>
+                            <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;password must be an &quot;</span>
+                            <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">string_type</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;source must be an &quot;</span>
+                            <span class="s2">&quot;instance of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">string_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,))</span>
+        <span class="n">common</span><span class="o">.</span><span class="n">validate_auth_mechanism</span><span class="p">(</span><span class="s1">&#39;mechanism&#39;</span><span class="p">,</span> <span class="n">mechanism</span><span class="p">)</span>
+
+        <span class="n">validated_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">option</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">iteritems</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">normalized</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">validate_auth_option</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="n">validated_options</span><span class="p">[</span><span class="n">normalized</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="n">credentials</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">_build_credentials_tuple</span><span class="p">(</span>
+            <span class="n">mechanism</span><span class="p">,</span>
+            <span class="n">source</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">password</span><span class="p">,</span>
+            <span class="n">validated_options</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_cache_credentials</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">credentials</span><span class="p">,</span>
+            <span class="n">connect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">logout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Deauthorize use of this database.</span>
+
+<span class="sd">        .. warning:: Starting in MongoDB 3.6, calling :meth:`logout`</span>
+<span class="sd">          invalidates all existing cursors. It may also leave logical sessions</span>
+<span class="sd">          open on the server for up to 30 minutes until they time out.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.logout() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Sockets will be deauthenticated as they are used.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_purge_credentials</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dereference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbref</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dereference a :class:`~bson.dbref.DBRef`, getting the</span>
+<span class="sd">        document it points to.</span>
+
+<span class="sd">        Raises :class:`TypeError` if `dbref` is not an instance of</span>
+<span class="sd">        :class:`~bson.dbref.DBRef`. Returns a document, or ``None`` if</span>
+<span class="sd">        the reference does not point to a valid document.  Raises</span>
+<span class="sd">        :class:`ValueError` if `dbref` has a database specified that</span>
+<span class="sd">        is different from the current database.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `dbref`: the reference</span>
+<span class="sd">          - `session` (optional): a</span>
+<span class="sd">            :class:`~pymongo.client_session.ClientSession`.</span>
+<span class="sd">          - `**kwargs` (optional): any additional keyword arguments</span>
+<span class="sd">            are the same as the arguments to</span>
+<span class="sd">            :meth:`~pymongo.collection.Collection.find`.</span>
+
+<span class="sd">        .. versionchanged:: 3.6</span>
+<span class="sd">           Added ``session`` parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dbref</span><span class="p">,</span> <span class="n">DBRef</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;cannot dereference a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">dbref</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">dbref</span><span class="o">.</span><span class="n">database</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dbref</span><span class="o">.</span><span class="n">database</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;trying to dereference a DBRef that points to &quot;</span>
+                             <span class="s2">&quot;another database (</span><span class="si">%r</span><span class="s2"> not </span><span class="si">%r</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">dbref</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">dbref</span><span class="o">.</span><span class="n">collection</span><span class="p">]</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">dbref</span><span class="o">.</span><span class="n">id</span><span class="p">},</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Evaluate a JavaScript expression in MongoDB.</span>
+
+<span class="sd">        :Parameters:</span>
+<span class="sd">          - `code`: string representation of JavaScript code to be</span>
+<span class="sd">            evaluated</span>
+<span class="sd">          - `args` (optional): additional positional arguments are</span>
+<span class="sd">            passed to the `code` being evaluated</span>
+
+<span class="sd">        .. warning:: the eval command is deprecated in MongoDB 3.0 and</span>
+<span class="sd">          will be removed in a future server version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Database.eval() is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">Code</span><span class="p">):</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">Code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;$eval&quot;</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retval&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This is only here so that some API misusages are easier to debug.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&#39;Database&#39; object is not callable. If you meant to &quot;</span>
+                        <span class="s2">&quot;call the &#39;</span><span class="si">%s</span><span class="s2">&#39; method on a &#39;</span><span class="si">%s</span><span class="s2">&#39; object it is &quot;</span>
+                        <span class="s2">&quot;failing because no such method exists.&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__client</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">SystemJS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Helper class for dealing with stored JavaScript.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;**DEPRECATED**: Get a system js helper for the database `database`.</span>
+
+<span class="sd">        SystemJS will be removed in PyMongo 4.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;SystemJS is deprecated&quot;</span><span class="p">,</span>
+                      <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">database</span><span class="o">.</span><span class="n">write_concern</span><span class="o">.</span><span class="n">acknowledged</span><span class="p">:</span>
+            <span class="n">database</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_database</span><span class="p">(</span>
+                <span class="n">database</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">write_concern</span><span class="o">=</span><span class="n">DEFAULT_WRITE_CONCERN</span><span class="p">)</span>
+        <span class="c1"># can&#39;t just assign it since we&#39;ve overridden __setattr__</span>
+        <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_db&quot;</span><span class="p">,</span> <span class="n">database</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">js</span><span class="o">.</span><span class="n">replace_one</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">Code</span><span class="p">(</span><span class="n">code</span><span class="p">)},</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">js</span><span class="o">.</span><span class="n">delete_one</span><span class="p">({</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__delattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">Code</span><span class="p">(</span><span class="s2">&quot;function() { &quot;</span>
+                                                <span class="s2">&quot;return this[name].apply(&quot;</span>
+                                                <span class="s2">&quot;this, arguments); }&quot;</span><span class="p">,</span>
+                                                <span class="n">scope</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">}),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of the names of the functions stored in this database.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">js</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">])]</span>
+</pre></div>
+
+        </div>
+        <div class="side-doc-outline">
+            <div class="side-doc-outline--content"> 
+            </div>
+        </div>
+
+      <div class="clearer"></div>
+    </div><div class="pagenation">
+  </div>
+        <footer class="mdl-mini-footer">
+    <div class="mdl-mini-footer__left-section">
+      <div class="mdl-logo">ErinaBot API reference</div>
+      <div>
+        
+        
+      </div>
+    </div>
+
+    <div class="mdl-mini-footer__right-section">
+        <div>&copy; Copyright 2020, edo0xff.</div>
+      <div>Generated by <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.1 using <a href="https://github.com/myyasuda/sphinx_materialdesign_theme">sphinx_materialdesign_theme</a>.</div>
+    </div>
+</footer>
+        </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>ErinaBot._music_player &#8212; ErinaBot API reference 0.1 documentation</title>
+
+    <link rel="stylesheet" href="../../_static/material-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/notosanscjkjp.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/roboto.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/material-design-lite-1.3.0/material.indigo-pink.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx_materialdesign_theme.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/sphinx_materialdesign_theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer"><header class="mdl-layout__header mdl-layout__header--waterfall ">
+    <div class="mdl-layout__header-row">
+        
+        <nav class="mdl-navigation breadcrumb">
+            <a class="mdl-navigation__link" href="../index.html">Module code</a><i class="material-icons">navigate_next</i>
+            <a class="mdl-navigation__link is-active">ErinaBot._music_player</a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+        
+<form class="form-inline pull-sm-right" action="../../search.html" method="get">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label id="quick-search-icon" class="mdl-button mdl-js-button mdl-button--icon"  for="waterfall-exp">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="q"  id="waterfall-exp" placeholder="Search" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </div>
+      </div>
+      <div class="mdl-tooltip" data-mdl-for="quick-search-icon">
+      Quick search
+      </div>
+</form>
+        
+        </nav>
+    </div>
+    <div class="mdl-layout__header-row header-links">
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+      </nav>
+    </div>
+</header><header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+        <main class="mdl-layout__content" tabIndex="0">
+<header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+
+    <div class="document">
+        <div class="page-content">
+        
+  <h1>Source code for ErinaBot._music_player</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The MIT License (MIT)</span>
+
+<span class="sd">Copyright (c) 2020 edo0xff</span>
+
+<span class="sd">Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="sd">copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="sd">to deal in the Software without restriction, including without limitation</span>
+<span class="sd">the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="sd">and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="sd">Software is furnished to do so, subject to the following conditions:</span>
+
+<span class="sd">The above copyright notice and this permission notice shall be included in</span>
+<span class="sd">all copies or substantial portions of the Software.</span>
+
+<span class="sd">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="sd">OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="sd">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="sd">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="sd">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="sd">FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="sd">DEALINGS IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">discord</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">unidecode</span>
+<span class="kn">import</span> <span class="nn">youtube_dl</span>
+
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">from</span> <span class="nn">async_timeout</span> <span class="kn">import</span> <span class="n">timeout</span>
+
+
+<div class="viewcode-block" id="MusicQueue"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicQueue">[docs]</a><span class="k">class</span> <span class="nc">MusicQueue</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class is used for MusicPlayer to manage songs queues for the music</span>
+<span class="sd">    play feature. This class uses asyncio Queues.</span>
+
+<span class="sd">    .. attribute:: queue(asyncio.Queue(maxsize=50))</span>
+<span class="sd">        Songs queue</span>
+
+<span class="sd">    .. attribute:: text_channel(discord.TextChannel)</span>
+<span class="sd">        Queue text channel (user requested songs from this text channel)</span>
+
+<span class="sd">    .. attribute:: voice_channel(discord.VoiceClient)</span>
+<span class="sd">        Queue voice channel (user who requested songs is in this voice channel)</span>
+
+<span class="sd">    .. attribute:: volume(float)</span>
+<span class="sd">        Volume for the queue songs (float from 0.0 to 1.0, 1.0 by default)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="MusicQueue.__init__"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicQueue.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_channel</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initializes the Music Queue.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text_channel(discord.TextChannel): Text channel for the queue (when</span>
+<span class="sd">                                                a song starts it sends song&#39;s info</span>
+<span class="sd">                                                to this channel).</span>
+<span class="sd">            voice_channel(discord.VoiceClient): Songs will be played here.</span>
+<span class="sd">            loop(asyncio.AbstractEventLoop): We need this to create tasks (we get</span>
+<span class="sd">                                                it from client.loop).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_channel</span> <span class="o">=</span> <span class="n">text_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voice_channel</span> <span class="o">=</span> <span class="n">voice_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__queue_worker</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Disconnects voice channel and stops task loop.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">__queue_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Queue worker waits for songs in the queue and plays them in voice channel.</span>
+<span class="sd">        When a song is putted to the queue it plays it and also sends a embed</span>
+<span class="sd">        message with song info.</span>
+
+<span class="sd">        It waits 3 minutes for songs. If there is no songs putted in those 3 minutes</span>
+<span class="sd">        automatically leaves the voice_channel and stop the queue task.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># wait for 3 minutes for songs</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">timeout</span><span class="p">(</span><span class="mi">180</span><span class="p">):</span>
+                    <span class="n">song</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+            <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Nadie esta escuchando musica, salgo del canal de voz :pleading_face:&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__destroy</span><span class="p">()</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">__destroy</span><span class="p">()</span>
+                <span class="k">continue</span>
+
+            <span class="n">source</span> <span class="o">=</span> <span class="n">song</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">song</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span>
+
+            <span class="n">embed</span> <span class="o">=</span> <span class="p">(</span><span class="n">discord</span><span class="o">.</span><span class="n">Embed</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;:headphones: Ahora suena&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">discord</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">purple</span><span class="p">())</span>
+                    <span class="o">.</span><span class="n">set_thumbnail</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;thumbnail&#39;</span><span class="p">])</span>
+                    <span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Requested By&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;requested_by&#39;</span><span class="p">])</span>
+                    <span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Enlaces&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;[YouTube](</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">])))</span>
+
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">embed</span><span class="o">=</span><span class="n">embed</span><span class="p">)</span>
+
+            <span class="n">source</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">after</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">set</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">is_playing</span><span class="p">()</span>
+
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+            <span class="n">source</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MusicPlayer"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer">[docs]</a><span class="k">class</span> <span class="nc">MusicPlayer</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Music utilities like download search and play. You will use this class throw</span>
+<span class="sd">    ErinaBot.music object.</span>
+
+<span class="sd">    .. attribute:: queues(dict)</span>
+<span class="sd">        Dictionary that contains *channel* -&gt; *music queue*.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queues</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="MusicPlayer.get_voice_channel"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.get_voice_channel">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_voice_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">author</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the voice channel for the given user (who sends a message requesting</span>
+<span class="sd">        a song).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client(discord.Client): Discord client, we gonna search the voice_channel here.</span>
+<span class="sd">            author(discord.User): User who requested the song.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            discord.VoiceClient: Voice channel (False if user is no connected to a voice channel).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">voice_channel</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">voice_clients</span><span class="p">,</span> <span class="n">guild</span><span class="o">=</span><span class="n">author</span><span class="o">.</span><span class="n">guild</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">voice_channel</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">voice_channel</span><span class="o">.</span><span class="n">is_connected</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">author</span><span class="o">.</span><span class="n">voice</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="n">voice_channel</span> <span class="o">=</span> <span class="k">await</span> <span class="n">author</span><span class="o">.</span><span class="n">voice</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">voice_channel</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.get_queue"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text_channel</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the music queue for the given voice_channel. If the given voice_channel</span>
+<span class="sd">        doesn&#39;t have a music queue it creates one.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text_channel(discord.TextChannel): text_channel for the queue (if</span>
+<span class="sd">                                                queue needs to be created).</span>
+<span class="sd">            voice_channel(discord.VoiceClient): voice_channel for the queue.</span>
+<span class="sd">            loop(asyncio.AbstractEventLoop): we get this from *client.loop*</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ErinaBot.MusicQueue: Music queue for the given voice_channel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="p">[</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">queue</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">queue</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="n">MusicQueue</span><span class="p">(</span><span class="n">text_channel</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="p">[</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">queue</span>
+
+        <span class="k">return</span> <span class="n">queue</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.remove_queue"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.remove_queue">[docs]</a>    <span class="k">def</span> <span class="nf">remove_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Removes queue for the given voice_channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            voice_channel(discord.VoiceClient): It will removes the queue for this channel.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="p">[</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.set_volume"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.set_volume">[docs]</a>    <span class="k">def</span> <span class="nf">set_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">volume</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sets the music volume for the given channel (if it is playing music).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            voice_channel(discord.VoiceClient): Set the volumen for this channel.</span>
+<span class="sd">            volume(float): Volume from 0.0 to 1.0.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="p">[</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">queue</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="n">voice_channel</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="n">volume</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.get_queue_info"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.get_queue_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gets the queued songs for the given voice_channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            voice_channel(discord.VoiceClient): Gets the queued songs of this channel.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            array[dict]: Array of dictionaries (each dictionary contains: [&#39;source&#39;] and [&#39;metadata&#39;] keys).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queues</span><span class="p">[</span><span class="n">voice_channel</span><span class="o">.</span><span class="n">guild</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">upcoming</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">_queue</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">upcoming</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.search_yt_video"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.search_yt_video">[docs]</a>    <span class="k">def</span> <span class="nf">search_yt_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Search for songs (any video actually) for the given search query.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            Results are limited to 10.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            query(str): Search for videos of this in YouTube.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            array[dict]: Array dictionaries of the results (each dictionary contains [&#39;url&#39;] and [&#39;name&#39;] keys)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://www.youtube.com/results?search_query=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+
+        <span class="n">videos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span><span class="s1">&#39;yt-uix-tile-link&#39;</span><span class="p">},</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.youtube.com&#39;</span> <span class="o">+</span> <span class="n">vid</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">vid</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">url</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;channel&quot;</span> <span class="ow">in</span> <span class="n">url</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;playlist&quot;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+                <span class="n">videos</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;url&#39;</span><span class="p">:</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="n">name</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">videos</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.download_yt_video"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.download_yt_video">[docs]</a>    <span class="k">def</span> <span class="nf">download_yt_video</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Downloads a YouTube video.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url(str): Url for the video to download.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple(song_path, song_title, song_thumbnail): each value will be False if the download fails.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="s2">&quot;user&quot;</span> <span class="ow">in</span> <span class="n">url</span> <span class="ow">or</span> <span class="s2">&quot;channel&quot;</span> <span class="ow">in</span> <span class="n">url</span> <span class="ow">or</span> <span class="s2">&quot;playlist&quot;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+        <span class="n">song_title</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;property&#39;</span><span class="p">:</span><span class="s1">&#39;og:title&#39;</span><span class="p">})[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+        <span class="n">song_thumbnail</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;property&#39;</span><span class="p">:</span><span class="s1">&#39;og:image&#39;</span><span class="p">})[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+
+        <span class="n">song_path</span> <span class="o">=</span> <span class="s2">&quot;songs/</span><span class="si">%s</span><span class="s2">.mp3&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">song_title</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">song_path</span><span class="p">):</span>
+            <span class="n">ydl_opts</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;bestaudio/best&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;postprocessors&#39;</span><span class="p">:</span> <span class="p">[{</span>
+                    <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;FFmpegExtractAudio&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;preferredcodec&#39;</span><span class="p">:</span> <span class="s1">&#39;mp3&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;preferredquality&#39;</span><span class="p">:</span> <span class="s1">&#39;192&#39;</span><span class="p">,</span>
+                <span class="p">}],</span>
+                <span class="s1">&#39;outtmpl&#39;</span><span class="p">:</span> <span class="s1">&#39;songs/&#39;</span> <span class="o">+</span> <span class="n">song_title</span> <span class="o">+</span> <span class="s1">&#39;.</span><span class="si">%(ext)s</span><span class="s1">&#39;</span>
+            <span class="p">}</span>
+
+            <span class="k">with</span> <span class="n">youtube_dl</span><span class="o">.</span><span class="n">YoutubeDL</span><span class="p">(</span><span class="n">ydl_opts</span><span class="p">)</span> <span class="k">as</span> <span class="n">ydl</span><span class="p">:</span>
+                <span class="n">ydl</span><span class="o">.</span><span class="n">download</span><span class="p">([</span><span class="n">url</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">song_path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">song_path</span><span class="p">,</span> <span class="n">song_title</span><span class="p">,</span> <span class="n">song_thumbnail</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.list_downloaded_songs"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.list_downloaded_songs">[docs]</a>    <span class="k">def</span> <span class="nf">list_downloaded_songs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get a list of the downloaded songs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            array[str]: Names of the donwloaded songs (only name not full path).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="s2">&quot;songs/&quot;</span><span class="p">)</span>
+        <span class="n">songs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="n">songs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">songs</span></div>
+
+<div class="viewcode-block" id="MusicPlayer.play"><a class="viewcode-back" href="../../index.html#ErinaBot.MusicPlayer.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Enqueue a song for the given voice_channel.</span>
+
+<span class="sd">        Song metadata must be a dictionary like this:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            metadata = {</span>
+<span class="sd">                &#39;path&#39;:&#39;song/file/path.mp3&#39;,</span>
+<span class="sd">                &#39;title&#39;:&#39;song title&#39;,</span>
+<span class="sd">                &#39;thumbnail&#39;:&#39;song thumbnail url&#39;,</span>
+<span class="sd">                &#39;url&#39;:&#39;yt url&#39;,</span>
+<span class="sd">                &#39;requested_by&#39;: ctx.author.mention</span>
+<span class="sd">            }</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            You get those parameters (path, title, thumbnail) from ErinaBot.download_yt_video()</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            client(discord.Client): Needed to create the queue if it doesn&#39;t exists.</span>
+<span class="sd">            ctx(discord.Message): Needed to create the queue if it doesn&#39;t exists.</span>
+<span class="sd">            voice_channel(discord.VoiceClient): The song will be played here.</span>
+<span class="sd">            metadata(dict): Song metadata.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_queue</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="n">voice_channel</span><span class="p">,</span> <span class="n">client</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">FFmpegPCMAudio</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">PCMVolumeTransformer</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+        <span class="n">song</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">metadata</span>
+        <span class="p">}</span>
+
+        <span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">song</span><span class="p">)</span></div></div>
+</pre></div>
+
+        </div>
+        <div class="side-doc-outline">
+            <div class="side-doc-outline--content"> 
+            </div>
+        </div>
+
+      <div class="clearer"></div>
+    </div><div class="pagenation">
+  </div>
+        <footer class="mdl-mini-footer">
+    <div class="mdl-mini-footer__left-section">
+      <div class="mdl-logo">ErinaBot API reference</div>
+      <div>
+        
+        
+      </div>
+    </div>
+
+    <div class="mdl-mini-footer__right-section">
+        <div>&copy; Copyright 2020, edo0xff.</div>
+      <div>Generated by <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.1 using <a href="https://github.com/myyasuda/sphinx_materialdesign_theme">sphinx_materialdesign_theme</a>.</div>
+    </div>
+</footer>
+        </main>
+    </div>
+  </body>
+</html>

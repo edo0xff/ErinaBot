@@ -1,0 +1,1 @@
+python3 /home/edo/ErinaBot/main.py >> /home/edo/ErinaBot/errors.log 2>&1 &

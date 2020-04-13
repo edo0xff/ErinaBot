@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>ErinaBot.utils &#8212; ErinaBot API reference 0.1 documentation</title>
+
+    <link rel="stylesheet" href="../../_static/material-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/notosanscjkjp.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/roboto.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/material-design-lite-1.3.0/material.indigo-pink.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx_materialdesign_theme.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/sphinx_materialdesign_theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer"><header class="mdl-layout__header mdl-layout__header--waterfall ">
+    <div class="mdl-layout__header-row">
+        
+        <nav class="mdl-navigation breadcrumb">
+            <a class="mdl-navigation__link" href="../index.html">Module code</a><i class="material-icons">navigate_next</i>
+            <a class="mdl-navigation__link is-active">ErinaBot.utils</a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+        
+<form class="form-inline pull-sm-right" action="../../search.html" method="get">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label id="quick-search-icon" class="mdl-button mdl-js-button mdl-button--icon"  for="waterfall-exp">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="q"  id="waterfall-exp" placeholder="Search" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </div>
+      </div>
+      <div class="mdl-tooltip" data-mdl-for="quick-search-icon">
+      Quick search
+      </div>
+</form>
+        
+        </nav>
+    </div>
+    <div class="mdl-layout__header-row header-links">
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+      </nav>
+    </div>
+</header><header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+        <main class="mdl-layout__content" tabIndex="0">
+<header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+
+    <div class="document">
+        <div class="page-content">
+        
+  <h1>Source code for ErinaBot.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">ErinaBot Utilities</span>
+<span class="sd">~~~~~~~~~~~~~~~~~~</span>
+
+<span class="sd">Utilities for the example implementation.</span>
+
+<span class="sd">Sorry but I&#39;m spanish speaker so example bot implementations are in taco.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">unidecode</span>
+
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">get</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<div class="viewcode-block" id="covid_cases"><a class="viewcode-back" href="../../index.html#ErinaBot.utils.covid_cases">[docs]</a><span class="k">def</span> <span class="nf">covid_cases</span><span class="p">(</span><span class="n">search</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Search for latest covid statistics for the given country.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        search(str): Country name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Covid cases or error message if it couldn&#39;t find the country statistics.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://docs.google.com/spreadsheets/d/e/2PACX-1vR30F8lYP3jG7YOq8es0PBpJIE5yvRVZffOyaqC0GgMBN6yt0Q-NI8pxS7hd1F9dYXnowSC6zpZmW9D/pubhtml?gid=0&amp;amp;single=true&amp;amp;widget=true&amp;amp;headers=false&amp;amp;range=A1:I202&quot;</span><span class="p">)</span>
+
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+    <span class="n">tables</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)</span>
+
+    <span class="n">search</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">)</span>
+        <span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">unidecode</span><span class="o">.</span><span class="n">unidecode</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+                <span class="n">country</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">confirmed</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">deaths</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">serious</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+                <span class="n">recovered</span> <span class="o">=</span> <span class="n">cells</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">country</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">unidecode</span><span class="o">.</span><span class="n">unidecode</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
+                    <span class="k">return</span> <span class="s2">&quot;Casos de Covid-19 en **</span><span class="si">%s</span><span class="s2">** : </span><span class="si">%s</span><span class="s2"> confirmados </span><span class="si">%s</span><span class="s2"> muertes </span><span class="si">%s</span><span class="s2"> graves </span><span class="si">%s</span><span class="s2"> recuperados</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">country</span><span class="p">,</span> <span class="n">confirmed</span><span class="p">,</span> <span class="n">deaths</span><span class="p">,</span> <span class="n">serious</span><span class="p">,</span> <span class="n">recovered</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="s2">&quot;Lo siento no pude obtener los datos en este momento :( meper donas?&quot;</span></div>
+
+<div class="viewcode-block" id="get_nudes"><a class="viewcode-back" href="../../index.html#ErinaBot.utils.get_nudes">[docs]</a><span class="k">def</span> <span class="nf">get_nudes</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    ( ͡° ͜ʖ ͡°)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple(file_url, preview_url): file and thumbnail urls.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://rule34.xxx/index.php/index.php?page=dapi&amp;s=post&amp;q=index&amp;tags=Nier&amp;limit=50&amp;pid=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">88</span><span class="p">)))</span>
+
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+    <span class="n">posts</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&quot;post&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">post</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">posts</span><span class="p">)</span>
+
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;No encontre ninguno de </span><span class="si">%s</span><span class="s2"> :c&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;file_url&#39;</span><span class="p">],</span> <span class="n">post</span><span class="p">[</span><span class="s1">&#39;preview_url&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="get_meme"><a class="viewcode-back" href="../../index.html#ErinaBot.utils.get_meme">[docs]</a><span class="k">def</span> <span class="nf">get_meme</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Gets a random meme.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Meme url.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://es.memedroid.com/memes/random/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+    <span class="n">articles</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s1">&#39;article&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;gallery-item&#39;</span><span class="p">})</span>
+
+    <span class="n">article</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
+    <span class="n">meme</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">meme</span></div>
+
+<div class="viewcode-block" id="get_joke"><a class="viewcode-back" href="../../index.html#ErinaBot.utils.get_joke">[docs]</a><span class="k">def</span> <span class="nf">get_joke</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Gets a random joke.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Joke.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;http://www.chistes.com/chistealazar.asp&quot;</span><span class="p">)</span>
+
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;chiste&#39;</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">box</span><span class="o">.</span><span class="n">text</span></div>
+</pre></div>
+
+        </div>
+        <div class="side-doc-outline">
+            <div class="side-doc-outline--content"> 
+            </div>
+        </div>
+
+      <div class="clearer"></div>
+    </div><div class="pagenation">
+  </div>
+        <footer class="mdl-mini-footer">
+    <div class="mdl-mini-footer__left-section">
+      <div class="mdl-logo">ErinaBot API reference</div>
+      <div>
+        
+        
+      </div>
+    </div>
+
+    <div class="mdl-mini-footer__right-section">
+        <div>&copy; Copyright 2020, edo0xff.</div>
+      <div>Generated by <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.1 using <a href="https://github.com/myyasuda/sphinx_materialdesign_theme">sphinx_materialdesign_theme</a>.</div>
+    </div>
+</footer>
+        </main>
+    </div>
+  </body>
+</html>

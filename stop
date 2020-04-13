@@ -1,0 +1,2 @@
+export BOT_PID=`pgrep -f "/home/edo/ErinaBot/main.py"`
+kill -SIGINT $BOT_PID

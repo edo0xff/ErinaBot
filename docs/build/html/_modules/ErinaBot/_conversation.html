@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>ErinaBot._conversation &#8212; ErinaBot API reference 0.1 documentation</title>
+
+    <link rel="stylesheet" href="../../_static/material-icons.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/notosanscjkjp.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/roboto.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/material-design-lite-1.3.0/material.indigo-pink.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx_materialdesign_theme.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/sphinx_materialdesign_theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer"><header class="mdl-layout__header mdl-layout__header--waterfall ">
+    <div class="mdl-layout__header-row">
+        
+        <nav class="mdl-navigation breadcrumb">
+            <a class="mdl-navigation__link" href="../index.html">Module code</a><i class="material-icons">navigate_next</i>
+            <a class="mdl-navigation__link is-active">ErinaBot._conversation</a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+        
+<form class="form-inline pull-sm-right" action="../../search.html" method="get">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label id="quick-search-icon" class="mdl-button mdl-js-button mdl-button--icon"  for="waterfall-exp">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="q"  id="waterfall-exp" placeholder="Search" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </div>
+      </div>
+      <div class="mdl-tooltip" data-mdl-for="quick-search-icon">
+      Quick search
+      </div>
+</form>
+        
+        </nav>
+    </div>
+    <div class="mdl-layout__header-row header-links">
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+      </nav>
+    </div>
+</header><header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+        <main class="mdl-layout__content" tabIndex="0">
+<header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="../../index.html">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"></nav>
+        
+        </div>
+    
+</header>
+
+    <div class="document">
+        <div class="page-content">
+        
+  <h1>Source code for ErinaBot._conversation</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The MIT License (MIT)</span>
+
+<span class="sd">Copyright (c) 2020 edo0xff</span>
+
+<span class="sd">Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="sd">copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="sd">to deal in the Software without restriction, including without limitation</span>
+<span class="sd">the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="sd">and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="sd">Software is furnished to do so, subject to the following conditions:</span>
+
+<span class="sd">The above copyright notice and this permission notice shall be included in</span>
+<span class="sd">all copies or substantial portions of the Software.</span>
+
+<span class="sd">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="sd">OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="sd">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="sd">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="sd">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="sd">FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="sd">DEALINGS IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">unidecode</span>
+<span class="kn">import</span> <span class="nn">Levenshtein</span>
+
+<span class="kn">from</span> <span class="nn">discord</span> <span class="kn">import</span> <span class="n">Embed</span><span class="p">,</span> <span class="n">Color</span>
+
+<span class="n">intention_callbacks</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">intentions_help</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<div class="viewcode-block" id="Arguments"><a class="viewcode-back" href="../../index.html#ErinaBot.Arguments">[docs]</a><span class="k">class</span> <span class="nc">Arguments</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class is used to represent arguments (strings, numbers and urls)</span>
+<span class="sd">    inside messages content.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        *String* is anything inside quotes.</span>
+
+<span class="sd">    .. attribute:: string(str)</span>
+<span class="sd">        An string in the given message content.</span>
+
+<span class="sd">    .. attribute:: number(int)</span>
+<span class="sd">        A number in the given message content.</span>
+
+<span class="sd">    .. attribute:: yt_url(str)</span>
+<span class="sd">        A YouTube url in the given message content.</span>
+
+<span class="sd">    You will receive an intance object of this class in your intention handlers.</span>
+<span class="sd">    If there is no arguments in the message content class attributes will be *None*.</span>
+
+<span class="sd">    Quick example of reading arguments:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        # ...</span>
+
+<span class="sd">        @erina.intention</span>
+<span class="sd">        async def some_nice_intention(ctx, args):</span>
+<span class="sd">            if args.string:</span>
+<span class="sd">                await ctx.channel.send(&quot;String argument: %s&quot; %(args.string))</span>
+
+<span class="sd">            if args.number:</span>
+<span class="sd">                await ctx.channel.send(&quot;Numeric argument: %i&quot; %(args.number))</span>
+
+<span class="sd">            if args.yt_url:</span>
+<span class="sd">                await ctx.channel.send(&quot;YouTube url: %s&quot; %(args.yt_url))</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Arguments.__init__"><a class="viewcode-back" href="../../index.html#ErinaBot.Arguments.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Search for arguments in the given string.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            content (str): Message content.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yt_url</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">regex1</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(</span><span class="se">\&#39;</span><span class="s1">|\&quot;)(.*)(</span><span class="se">\&#39;</span><span class="s1">|\&quot;)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">regex2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+        <span class="n">regex3</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;(https?://)?(www\.)?&#39;</span>
+            <span class="s1">&#39;(youtube|youtu|youtube-nocookie)\.(com|be)/&#39;</span>
+            <span class="s1">&#39;(watch\?v=|embed/|v/|.+\?v=)?([^&amp;=%\?]</span><span class="si">{11}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">string</span> <span class="o">=</span> <span class="n">regex1</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">regex2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">regex3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yt_url</span> <span class="o">=</span> <span class="s2">&quot;http://www.youtube.com/watch?v=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">regex2</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="Conversation"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation">[docs]</a><span class="k">class</span> <span class="nc">Conversation</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class handle the received messages and process them to recognize the</span>
+<span class="sd">    message intention based on the levenshtein distance between input message</span>
+<span class="sd">    and loaded intentions.</span>
+
+<span class="sd">    .. important::</span>
+<span class="sd">        You will use this class throw **ErinaBot.conversation** instance.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Initializes dictionary and context vars.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__clear_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Removes strings between quotes also removes punctuations</span>
+<span class="sd">        and non ascii characters and also removes bot&#39;s name (eri) and</span>
+<span class="sd">        youtube url&#39;s in order to increase recognition accurate.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (str): String to clear.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">unidecode</span><span class="o">.</span><span class="n">unidecode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\&quot;|</span><span class="se">\&#39;</span><span class="s1">)(.+)(\&quot;|</span><span class="se">\&#39;</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;([0-9]+)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(^e+r+i+\s+)|(\s+e+r+i+$)|(\s+e+r+i+\s+)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;(https?://)?(www\.)?&#39;</span>
+                <span class="s1">&#39;(youtube|youtu|youtube-nocookie)\.(com|be)/&#39;</span>
+                <span class="s1">&#39;(watch\?v=|embed/|v/|.+\?v=)?([^&amp;=%\?]</span><span class="si">{11}</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">text</span>
+
+<div class="viewcode-block" id="Conversation.get_context"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.get_context">[docs]</a>    <span class="k">def</span> <span class="nf">get_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Gets the context value for the especified context.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ctx (discord.Message): Context.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The context value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="Conversation.set_context"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.set_context">[docs]</a>    <span class="k">def</span> <span class="nf">set_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Sets the context value for the especified context.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ctx (discord.Message): Context.</span>
+<span class="sd">            value (str): Context value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Conversation.clear_context"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.clear_context">[docs]</a>    <span class="k">def</span> <span class="nf">clear_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Clears the context value for the especified context.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ctx (discord.Message): Context.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="Conversation.set_context_var"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.set_context_var">[docs]</a>    <span class="k">def</span> <span class="nf">set_context_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Creates a context var for the especified context.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ctx (discord.Message): Context.</span>
+<span class="sd">            var (str): Var name.</span>
+<span class="sd">            val (mixed): Var value, it could be whatever you want.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span></div>
+
+<div class="viewcode-block" id="Conversation.get_context_var"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.get_context_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Gets the value of the especified context var.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ctx (discord.Message): Context.</span>
+<span class="sd">            var (str): Var name.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            mixed: Var value.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span></div>
+
+<div class="viewcode-block" id="Conversation.load_dictionary"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.load_dictionary">[docs]</a>    <span class="k">def</span> <span class="nf">load_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Loads a dictionary of intentions or dialogs. Must be a .yml file.</span>
+<span class="sd">        see *intentions.yml* and *dialogs.yml* for reference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file(str): Intentions or Dialogs disctionary path.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">loaded</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">question</span><span class="p">,</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">loaded</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">sub_question</span> <span class="ow">in</span> <span class="n">question</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__clear_string</span><span class="p">(</span><span class="n">sub_question</span><span class="p">),</span> <span class="n">answer</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">__clear_string</span><span class="p">(</span><span class="n">question</span><span class="p">),</span> <span class="n">answer</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Conversation.talking_to_me"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.talking_to_me">[docs]</a>    <span class="k">def</span> <span class="nf">talking_to_me</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Look for the bot&#39;s name (eri) in the given string.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            text (str): String to search in.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            boolean: True if the bot&#39;s name is in the given string.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(^e+r+i+\s+)|(\s+e+r+i+$)|(\s+e+r+i+\s+)&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">regex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Conversation.recognize"><a class="viewcode-back" href="../../index.html#ErinaBot.Conversation.recognize">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">recognize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Reconize the intention of the given string and call the appropriate</span>
+<span class="sd">        intention handler. If the recognition result is a dialog not and intention</span>
+<span class="sd">        it will send the dialog answer.</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            If the intention handler is not defined will not throw an error it will</span>
+<span class="sd">            just log an alert.</span>
+
+<span class="sd">        *How to use it:*</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            import discord</span>
+<span class="sd">            import ErinaBot as erina</span>
+
+<span class="sd">            ACCESS_TOKEN = &quot;your_atoken_here&quot;</span>
+
+<span class="sd">            client = discord.Client()</span>
+
+<span class="sd">            # DEFINE HERE YOUR INTENTION HANDLERS</span>
+
+<span class="sd">            @client.event</span>
+<span class="sd">            async def on_ready():</span>
+<span class="sd">                print(&quot;Bot is ready!&quot;)</span>
+<span class="sd">                activity = discord.Activity(type=discord.ActivityType.watching, name=&quot;Movies!&quot;)</span>
+<span class="sd">                await client.change_presence(status=discord.Status.online, activity=activity)</span>
+
+<span class="sd">            @client.event</span>
+<span class="sd">            async def on_message(message):</span>
+<span class="sd">                if message.author == client.user:</span>
+<span class="sd">                    return</span>
+
+<span class="sd">                if (not client.user in message.mentions)\\</span>
+<span class="sd">                    and (not message.mention_everyone)\\</span>
+<span class="sd">                    and (not erina.conversation.talking_to_me(message.content)):</span>
+<span class="sd">                    return</span>
+
+<span class="sd">                # recognize the incoming message</span>
+<span class="sd">                await erina.conversation.recognize(message)</span>
+
+<span class="sd">            client.run(ACCESS_TOKEN)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            msg (discord.Message): Message to recognize.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">min_distance</span> <span class="o">=</span> <span class="mi">9999</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clear_string</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">)):</span>
+            <span class="n">question</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">Levenshtein</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&lt;</span> <span class="n">min_distance</span><span class="p">:</span>
+                <span class="n">min_distance</span> <span class="o">=</span> <span class="n">distance</span>
+                <span class="n">index</span> <span class="o">=</span>  <span class="n">i</span>
+
+        <span class="n">intention</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">intention</span> <span class="o">==</span> <span class="s1">&#39;help&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">help</span> <span class="ow">in</span> <span class="n">intentions_help</span><span class="p">:</span>
+                <span class="n">embed</span> <span class="o">=</span> <span class="n">Embed</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">help</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">purple</span><span class="p">())</span>
+
+                <span class="k">await</span> <span class="n">msg</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">embed</span><span class="o">=</span><span class="n">embed</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">intention</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">intention</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">msg</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">intention</span> <span class="ow">in</span> <span class="n">intention_callbacks</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ConversationError: recognized intention &#39;</span><span class="si">%s</span><span class="s2">&#39; is not implemented&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">intention</span><span class="p">))</span>
+                <span class="k">return</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recognized intention: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">intention</span><span class="p">))</span>
+            <span class="k">await</span> <span class="n">intention_callbacks</span><span class="p">[</span><span class="n">intention</span><span class="p">](</span><span class="n">msg</span><span class="p">,</span> <span class="n">Arguments</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">clean_content</span><span class="p">))</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">handle_intention</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Decorator for intention handler declaration.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">intention_callbacks</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
+    <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">:</span>
+        <span class="n">intentions_help</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">func</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">conversation</span> <span class="o">=</span> <span class="n">Conversation</span><span class="p">()</span>
+
+    <span class="n">conversation</span><span class="o">.</span><span class="n">load_dictionary</span><span class="p">(</span><span class="s2">&quot;intentions.yml&quot;</span><span class="p">)</span>
+    <span class="n">conversation</span><span class="o">.</span><span class="n">load_dictionary</span><span class="p">(</span><span class="s2">&quot;dialogs.yml&quot;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Di algo: &quot;</span><span class="p">)</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">conversation</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prediction: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">answer</span><span class="p">))</span>
+</pre></div>
+
+        </div>
+        <div class="side-doc-outline">
+            <div class="side-doc-outline--content"> 
+            </div>
+        </div>
+
+      <div class="clearer"></div>
+    </div><div class="pagenation">
+  </div>
+        <footer class="mdl-mini-footer">
+    <div class="mdl-mini-footer__left-section">
+      <div class="mdl-logo">ErinaBot API reference</div>
+      <div>
+        
+        
+      </div>
+    </div>
+
+    <div class="mdl-mini-footer__right-section">
+        <div>&copy; Copyright 2020, edo0xff.</div>
+      <div>Generated by <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.1 using <a href="https://github.com/myyasuda/sphinx_materialdesign_theme">sphinx_materialdesign_theme</a>.</div>
+    </div>
+</footer>
+        </main>
+    </div>
+  </body>
+</html>

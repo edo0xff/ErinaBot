@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    
+    <title>API Reference &#8212; ErinaBot API reference 0.1 documentation</title>
+
+    <link rel="stylesheet" href="_static/material-icons.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/notosanscjkjp.css" type="text/css" />
+    <link rel="stylesheet" href="_static/roboto.css" type="text/css" />
+    <link rel="stylesheet" href="_static/material-design-lite-1.3.0/material.indigo-pink.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx_materialdesign_theme.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/sphinx_materialdesign_theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer"><header class="mdl-layout__header mdl-layout__header--waterfall ">
+    <div class="mdl-layout__header-row">
+        
+        <nav class="mdl-navigation breadcrumb">
+            <a class="mdl-navigation__link is-active">API Reference</a>
+        </nav>
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+        
+<form class="form-inline pull-sm-right" action="search.html" method="get">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+        <label id="quick-search-icon" class="mdl-button mdl-js-button mdl-button--icon"  for="waterfall-exp">
+            <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="q"  id="waterfall-exp" placeholder="Search" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </div>
+      </div>
+      <div class="mdl-tooltip" data-mdl-for="quick-search-icon">
+      Quick search
+      </div>
+</form>
+        
+<a id="button-show-source"
+    class="mdl-button mdl-js-button mdl-button--icon"
+    href="_sources/index.rst.txt" rel="nofollow">
+<i class="material-icons">code</i>
+</a>
+<div class="mdl-tooltip" data-mdl-for="button-show-source">
+Show Source
+</div>
+        </nav>
+    </div>
+    <div class="mdl-layout__header-row header-links">
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+      </nav>
+    </div>
+</header><header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="#">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"><ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#erinabot">ErinaBot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#language">Language</a><ul>
+<li><a class="reference internal" href="#conversation">Conversation</a></li>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#music">Music</a><ul>
+<li><a class="reference internal" href="#musicplayer">MusicPlayer</a></li>
+<li><a class="reference internal" href="#musicqueue">MusicQueue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ErinaBot.utils">Miscellaneous</a><ul>
+<li><a class="reference internal" href="#erinabot-utilities">ErinaBot Utilities</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+        
+        </div>
+    
+</header>
+        <main class="mdl-layout__content" tabIndex="0">
+<header class="mdl-layout__drawer">
+    
+          <!-- Title -->
+      <span class="mdl-layout-title">
+          <a class="title" href="#">
+              <span class="title-text">
+                  ErinaBot API reference
+              </span>
+          </a>
+      </span>
+    
+    
+      <div class="globaltoc">
+        <span class="mdl-layout-title toc">Table Of Contents</span>
+        
+        
+        <!-- Local TOC -->
+        <nav class="mdl-navigation"><ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#erinabot">ErinaBot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#language">Language</a><ul>
+<li><a class="reference internal" href="#conversation">Conversation</a></li>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#music">Music</a><ul>
+<li><a class="reference internal" href="#musicplayer">MusicPlayer</a></li>
+<li><a class="reference internal" href="#musicqueue">MusicQueue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ErinaBot.utils">Miscellaneous</a><ul>
+<li><a class="reference internal" href="#erinabot-utilities">ErinaBot Utilities</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+        
+        </div>
+    
+</header>
+
+    <div class="document">
+        <div class="page-content">
+        
+  <div class="section" id="module-ErinaBot">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-ErinaBot" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="erinabot">
+<h2>ErinaBot<a class="headerlink" href="#erinabot" title="Permalink to this headline">¶</a></h2>
+<p>Discord bot with Natural Language Processing and other basic stuff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">copyright</dt>
+<dd class="field-odd"><p>2020 - Eduardo B.R. <a class="reference external" href="https://edo0xff.me">edo0xff</a></p>
+</dd>
+<dt class="field-even">license</dt>
+<dd class="field-even"><p>MIT, see LICENSE for more details.</p>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>I already coded a nice bot example so check the
+<a class="reference external" href="https://github.com/0oeduardoo0/ErinaBot">github repo</a>
+out!</p>
+</div>
+<dl class="py data">
+<dt id="ErinaBot.conversation">
+<code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">conversation</code><em class="property"> = &lt;ErinaBot._conversation.Conversation object&gt;</em><a class="headerlink" href="#ErinaBot.conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>ErinaBot.Conversation instance.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="ErinaBot.db">
+<code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">db</code><em class="property"> = Database(MongoClient(host=['localhost:27017'], document_class=dict, tz_aware=False, connect=True), 'ErinaBot')</em><a class="headerlink" href="#ErinaBot.db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mongo database instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ErinaBot.intention">
+<code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">intention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.intention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use this decorator to declarate intention handlers. The intention handler
+function name must be the same as intention defined in intentions.yml
+by example:</p>
+<p><em>intentions.yml</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span>
+    <span class="o">-</span>
+        <span class="o">-</span> <span class="n">what</span> <span class="n">time</span> <span class="ow">is</span> <span class="n">it</span>
+        <span class="o">-</span> <span class="n">show</span> <span class="n">time</span>
+        <span class="o">-</span> <span class="n">system</span> <span class="n">time</span>
+    <span class="o">-</span> <span class="n">show_time</span>
+</pre></div>
+</div>
+<p>Your intention handler for <em>show_time</em> should looks like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">ErinaBot</span> <span class="k">as</span> <span class="nn">erina</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">ACCESS_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;your_atoken_here&quot;</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+
+<span class="n">erina</span><span class="o">.</span><span class="n">conversation</span><span class="o">.</span><span class="n">load_dictionary</span><span class="p">(</span><span class="s2">&quot;intentions.yml&quot;</span><span class="p">)</span>
+
+<span class="nd">@erina</span><span class="o">.</span><span class="n">intention</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">show_time</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        **Show system time**</span>
+
+<span class="sd">        You can ask me for show system time :smiley:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Server time: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">date</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As you can notice you can document your intention handler in <em>python like doc</em>
+and it will be showed as help when bot receive a <em>help</em> command.</p>
+</div>
+<p>Intention handlers will receive two parameters <strong>ctx</strong> which is a
+<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/api.html#message">discord.Message</a>
+instance and <strong>args</strong> that is an <a class="reference external" href="#arguments">ErinaBot.Arguments</a> instance
+which contains arguments (string, numbers, url’s) in received messages.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="ErinaBot.music">
+<code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">music</code><em class="property"> = &lt;ErinaBot._music_player.MusicPlayer object&gt;</em><a class="headerlink" href="#ErinaBot.music" title="Permalink to this definition">¶</a></dt>
+<dd><p>ErinaBot.MusicPlayer instance.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="language">
+<h1>Language<a class="headerlink" href="#language" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="conversation">
+<h2>Conversation<a class="headerlink" href="#conversation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ErinaBot.Conversation">
+<em class="property">class </em><code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">Conversation</code><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handle the received messages and process them to recognize the
+message intention based on the levenshtein distance between input message
+and loaded intentions.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>You will use this class throw <strong>ErinaBot.conversation</strong> instance.</p>
+</div>
+<dl class="py method">
+<dt id="ErinaBot.Conversation._Conversation__clear_string">
+<code class="sig-name descname">_Conversation__clear_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.Conversation._Conversation__clear_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes strings between quotes also removes punctuations
+and non ascii characters and also removes bot’s name (eri) and
+youtube url’s in order to increase recognition accurate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – String to clear.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.clear_context">
+<code class="sig-name descname">clear_context</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.clear_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.clear_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the context value for the especified context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>discord.Message</em>) – Context.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.get_context">
+<code class="sig-name descname">get_context</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.get_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.get_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the context value for the especified context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>discord.Message</em>) – Context.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The context value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.get_context_var">
+<code class="sig-name descname">get_context_var</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">var</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.get_context_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.get_context_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the value of the especified context var.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>discord.Message</em>) – Context.</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – Var name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Var value.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mixed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.load_dictionary">
+<code class="sig-name descname">load_dictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.load_dictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.load_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a dictionary of intentions or dialogs. Must be a .yml file.
+see <em>intentions.yml</em> and <em>dialogs.yml</em> for reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>str</em>) – Intentions or Dialogs disctionary path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.recognize">
+<em class="property">async </em><code class="sig-name descname">recognize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.recognize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.recognize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reconize the intention of the given string and call the appropriate
+intention handler. If the recognition result is a dialog not and intention
+it will send the dialog answer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the intention handler is not defined will not throw an error it will
+just log an alert.</p>
+</div>
+<p><em>How to use it:</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">discord</span>
+<span class="kn">import</span> <span class="nn">ErinaBot</span> <span class="k">as</span> <span class="nn">erina</span>
+
+<span class="n">ACCESS_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;your_atoken_here&quot;</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+
+<span class="c1"># DEFINE HERE YOUR INTENTION HANDLERS</span>
+
+<span class="nd">@client</span><span class="o">.</span><span class="n">event</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_ready</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bot is ready!&quot;</span><span class="p">)</span>
+    <span class="n">activity</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">Activity</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">discord</span><span class="o">.</span><span class="n">ActivityType</span><span class="o">.</span><span class="n">watching</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Movies!&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">change_presence</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">discord</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">online</span><span class="p">,</span> <span class="n">activity</span><span class="o">=</span><span class="n">activity</span><span class="p">)</span>
+
+<span class="nd">@client</span><span class="o">.</span><span class="n">event</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">author</span> <span class="o">==</span> <span class="n">client</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">user</span> <span class="ow">in</span> <span class="n">message</span><span class="o">.</span><span class="n">mentions</span><span class="p">)</span>\
+        <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">message</span><span class="o">.</span><span class="n">mention_everyone</span><span class="p">)</span>\
+        <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">erina</span><span class="o">.</span><span class="n">conversation</span><span class="o">.</span><span class="n">talking_to_me</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># recognize the incoming message</span>
+    <span class="k">await</span> <span class="n">erina</span><span class="o">.</span><span class="n">conversation</span><span class="o">.</span><span class="n">recognize</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ACCESS_TOKEN</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>discord.Message</em>) – Message to recognize.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.set_context">
+<code class="sig-name descname">set_context</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.set_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.set_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the context value for the especified context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>discord.Message</em>) – Context.</p></li>
+<li><p><strong>value</strong> (<em>str</em>) – Context value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.set_context_var">
+<code class="sig-name descname">set_context_var</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">var</span></em>, <em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.set_context_var"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.set_context_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a context var for the especified context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>discord.Message</em>) – Context.</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – Var name.</p></li>
+<li><p><strong>val</strong> (<em>mixed</em>) – Var value, it could be whatever you want.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.Conversation.talking_to_me">
+<code class="sig-name descname">talking_to_me</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Conversation.talking_to_me"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Conversation.talking_to_me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for the bot’s name (eri) in the given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – String to search in.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the bot’s name is in the given string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ErinaBot.Arguments">
+<em class="property">class </em><code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">Arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to represent arguments (strings, numbers and urls)
+inside messages content.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>String</em> is anything inside quotes.</p>
+</div>
+<dl class="py attribute">
+<dt id="ErinaBot.Arguments.string">
+<code class="sig-name descname">string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.Arguments.string" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">An string in the given message content.</code></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ErinaBot.Arguments.number">
+<code class="sig-name descname">number</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.Arguments.number" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">A number in the given message content.</code></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ErinaBot.Arguments.yt_url">
+<code class="sig-name descname">yt_url</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.Arguments.yt_url" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">A YouTube url in the given message content.</code></dt>
+<dd></dd></dl>
+
+<p>You will receive an intance object of this class in your intention handlers.
+If there is no arguments in the message content class attributes will be <em>None</em>.</p>
+<p>Quick example of reading arguments:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+
+<span class="nd">@erina</span><span class="o">.</span><span class="n">intention</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">some_nice_intention</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">string</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;String argument: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">string</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">number</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Numeric argument: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">number</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">yt_url</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;YouTube url: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">yt_url</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="ErinaBot.Arguments.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_conversation.html#Arguments.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.Arguments.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for arguments in the given string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – Message content.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="music">
+<h1>Music<a class="headerlink" href="#music" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="musicplayer">
+<h2>MusicPlayer<a class="headerlink" href="#musicplayer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ErinaBot.MusicPlayer">
+<em class="property">class </em><code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">MusicPlayer</code><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Music utilities like download search and play. You will use this class throw
+ErinaBot.music object.</p>
+<dl class="py attribute">
+<dt id="ErinaBot.MusicPlayer.queues">
+<code class="sig-name descname">queues</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicPlayer.queues" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">Dictionary that contains *channel* -&gt; *music queue*.</code></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.download_yt_video">
+<code class="sig-name descname">download_yt_video</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.download_yt_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.download_yt_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads a YouTube video.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – Url for the video to download.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>each value will be False if the download fails.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(song_path, song_title, song_thumbnail)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.get_queue">
+<code class="sig-name descname">get_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_channel</span></em>, <em class="sig-param"><span class="n">voice_channel</span></em>, <em class="sig-param"><span class="n">loop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.get_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.get_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the music queue for the given voice_channel. If the given voice_channel
+doesn’t have a music queue it creates one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_channel</strong> (<em>discord.TextChannel</em>) – text_channel for the queue (if
+queue needs to be created).</p></li>
+<li><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – voice_channel for the queue.</p></li>
+<li><p><strong>loop</strong> (<em>asyncio.AbstractEventLoop</em>) – we get this from <em>client.loop</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Music queue for the given voice_channel.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ErinaBot.MusicQueue" title="ErinaBot.MusicQueue">ErinaBot.MusicQueue</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.get_queue_info">
+<code class="sig-name descname">get_queue_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">voice_channel</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.get_queue_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.get_queue_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the queued songs for the given voice_channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – Gets the queued songs of this channel.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of dictionaries (each dictionary contains: [‘source’] and [‘metadata’] keys).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.get_voice_channel">
+<em class="property">async </em><code class="sig-name descname">get_voice_channel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em>, <em class="sig-param"><span class="n">author</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.get_voice_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.get_voice_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the voice channel for the given user (who sends a message requesting
+a song).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>discord.Client</em>) – Discord client, we gonna search the voice_channel here.</p></li>
+<li><p><strong>author</strong> (<em>discord.User</em>) – User who requested the song.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Voice channel (False if user is no connected to a voice channel).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>discord.VoiceClient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.list_downloaded_songs">
+<code class="sig-name descname">list_downloaded_songs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.list_downloaded_songs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.list_downloaded_songs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of the downloaded songs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Names of the donwloaded songs (only name not full path).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>array[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.play">
+<code class="sig-name descname">play</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em>, <em class="sig-param"><span class="n">ctx</span></em>, <em class="sig-param"><span class="n">voice_channel</span></em>, <em class="sig-param"><span class="n">metadata</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enqueue a song for the given voice_channel.</p>
+<p>Song metadata must be a dictionary like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;path&#39;</span><span class="p">:</span><span class="s1">&#39;song/file/path.mp3&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;title&#39;</span><span class="p">:</span><span class="s1">&#39;song title&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;thumbnail&#39;</span><span class="p">:</span><span class="s1">&#39;song thumbnail url&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;url&#39;</span><span class="p">:</span><span class="s1">&#39;yt url&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;requested_by&#39;</span><span class="p">:</span> <span class="n">ctx</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">mention</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You get those parameters (path, title, thumbnail) from ErinaBot.download_yt_video()</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>discord.Client</em>) – Needed to create the queue if it doesn’t exists.</p></li>
+<li><p><strong>ctx</strong> (<em>discord.Message</em>) – Needed to create the queue if it doesn’t exists.</p></li>
+<li><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – The song will be played here.</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – Song metadata.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.remove_queue">
+<code class="sig-name descname">remove_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">voice_channel</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.remove_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.remove_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes queue for the given voice_channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – It will removes the queue for this channel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.search_yt_video">
+<code class="sig-name descname">search_yt_video</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.search_yt_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.search_yt_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for songs (any video actually) for the given search query.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Results are limited to 10.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query</strong> (<em>str</em>) – Search for videos of this in YouTube.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array dictionaries of the results (each dictionary contains [‘url’] and [‘name’] keys)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicPlayer.set_volume">
+<code class="sig-name descname">set_volume</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">voice_channel</span></em>, <em class="sig-param"><span class="n">volume</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicPlayer.set_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicPlayer.set_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the music volume for the given channel (if it is playing music).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – Set the volumen for this channel.</p></li>
+<li><p><strong>volume</strong> (<em>float</em>) – Volume from 0.0 to 1.0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="musicqueue">
+<h2>MusicQueue<a class="headerlink" href="#musicqueue" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="ErinaBot.MusicQueue">
+<em class="property">class </em><code class="sig-prename descclassname">ErinaBot.</code><code class="sig-name descname">MusicQueue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_channel</span></em>, <em class="sig-param"><span class="n">voice_channel</span></em>, <em class="sig-param"><span class="n">loop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicQueue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used for MusicPlayer to manage songs queues for the music
+play feature. This class uses asyncio Queues.</p>
+<dl class="py attribute">
+<dt id="ErinaBot.MusicQueue.queue">
+<code class="sig-name descname">queue</code><span class="sig-paren">(</span><em class="sig-param">asyncio.Queue(maxsize=50)</em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue.queue" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">Songs queue</code></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ErinaBot.MusicQueue.text_channel">
+<code class="sig-name descname">text_channel</code><span class="sig-paren">(</span><em class="sig-param">discord.TextChannel</em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue.text_channel" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">Queue text channel (user requested songs from this text channel)</code></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ErinaBot.MusicQueue.voice_channel">
+<code class="sig-name descname">voice_channel</code><span class="sig-paren">(</span><em class="sig-param">discord.VoiceClient</em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue.voice_channel" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">Queue voice channel (user who requested songs is in this voice channel)</code></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="ErinaBot.MusicQueue.volume">
+<code class="sig-name descname">volume</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">float</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue.volume" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="sig-name descname">Volume for the queue songs (float from 0.0 to 1.0, 1.0 by default)</code></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicQueue._MusicQueue__destroy">
+<em class="property">async </em><code class="sig-name descname">_MusicQueue__destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue._MusicQueue__destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnects voice channel and stops task loop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicQueue._MusicQueue__queue_worker">
+<em class="property">async </em><code class="sig-name descname">_MusicQueue__queue_worker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ErinaBot.MusicQueue._MusicQueue__queue_worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queue worker waits for songs in the queue and plays them in voice channel.
+When a song is putted to the queue it plays it and also sends a embed
+message with song info.</p>
+<p>It waits 3 minutes for songs. If there is no songs putted in those 3 minutes
+automatically leaves the voice_channel and stop the queue task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="ErinaBot.MusicQueue.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text_channel</span></em>, <em class="sig-param"><span class="n">voice_channel</span></em>, <em class="sig-param"><span class="n">loop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/_music_player.html#MusicQueue.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.MusicQueue.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the Music Queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text_channel</strong> (<em>discord.TextChannel</em>) – Text channel for the queue (when
+a song starts it sends song’s info
+to this channel).</p></li>
+<li><p><strong>voice_channel</strong> (<em>discord.VoiceClient</em>) – Songs will be played here.</p></li>
+<li><p><strong>loop</strong> (<em>asyncio.AbstractEventLoop</em>) – We need this to create tasks (we get
+it from client.loop).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-ErinaBot.utils">
+<span id="miscellaneous"></span><h1>Miscellaneous<a class="headerlink" href="#module-ErinaBot.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="erinabot-utilities">
+<h2>ErinaBot Utilities<a class="headerlink" href="#erinabot-utilities" title="Permalink to this headline">¶</a></h2>
+<p>Utilities for the example implementation.</p>
+<p>Sorry but I’m spanish speaker so example bot implementations are in taco.</p>
+<dl class="py function">
+<dt id="ErinaBot.utils.covid_cases">
+<code class="sig-prename descclassname">ErinaBot.utils.</code><code class="sig-name descname">covid_cases</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">search</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/utils.html#covid_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.utils.covid_cases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for latest covid statistics for the given country.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>search</strong> (<em>str</em>) – Country name.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Covid cases or error message if it couldn’t find the country statistics.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ErinaBot.utils.get_joke">
+<code class="sig-prename descclassname">ErinaBot.utils.</code><code class="sig-name descname">get_joke</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/utils.html#get_joke"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.utils.get_joke" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a random joke.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Joke.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ErinaBot.utils.get_meme">
+<code class="sig-prename descclassname">ErinaBot.utils.</code><code class="sig-name descname">get_meme</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/utils.html#get_meme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.utils.get_meme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a random meme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Meme url.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ErinaBot.utils.get_nudes">
+<code class="sig-prename descclassname">ErinaBot.utils.</code><code class="sig-name descname">get_nudes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ErinaBot/utils.html#get_nudes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ErinaBot.utils.get_nudes" title="Permalink to this definition">¶</a></dt>
+<dd><p>( ͡° ͜ʖ ͡°)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>file and thumbnail urls.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple(file_url, preview_url)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+        </div>
+        <div class="side-doc-outline">
+            <div class="side-doc-outline--content"> 
+<div class="localtoc">
+    <p class="caption">
+      <span class="caption-text">Table Of Contents</span>
+    </p>
+    <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#erinabot">ErinaBot</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#language">Language</a><ul>
+<li><a class="reference internal" href="#conversation">Conversation</a></li>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#music">Music</a><ul>
+<li><a class="reference internal" href="#musicplayer">MusicPlayer</a></li>
+<li><a class="reference internal" href="#musicqueue">MusicQueue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-ErinaBot.utils">Miscellaneous</a><ul>
+<li><a class="reference internal" href="#erinabot-utilities">ErinaBot Utilities</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+            </div>
+        </div>
+
+      <div class="clearer"></div>
+    </div><div class="pagenation">
+  </div>
+        <footer class="mdl-mini-footer">
+    <div class="mdl-mini-footer__left-section">
+      <div class="mdl-logo">ErinaBot API reference</div>
+      <div>
+        
+        
+      </div>
+    </div>
+
+    <div class="mdl-mini-footer__right-section">
+        <div>&copy; Copyright 2020, edo0xff.</div>
+      <div>Generated by <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.1 using <a href="https://github.com/myyasuda/sphinx_materialdesign_theme">sphinx_materialdesign_theme</a>.</div>
+    </div>
+</footer>
+        </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+bs4
+lxml
+discord
+unidecode
+youtube_dl
+pynacl
+pymongo
+python-Levenshtein
