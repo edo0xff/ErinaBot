@@ -6,3 +6,4 @@ youtube_dl
 pynacl
 pymongo
 python-Levenshtein
+sphinx_materialdesign_theme
