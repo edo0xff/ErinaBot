@@ -1,5 +1,6 @@
 bs4
 lxml
+yaml
 discord
 unidecode
 youtube_dl
