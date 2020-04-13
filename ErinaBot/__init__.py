@@ -47,7 +47,7 @@ intention = handle_intention
 
     *intentions.yml*
 
-    .. code-block::
+    .. code-block:: none
 
         -
             -
