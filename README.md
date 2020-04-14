@@ -1,3 +1,0 @@
-# ErinaBot
-
-working on this
