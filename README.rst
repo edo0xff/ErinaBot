@@ -207,12 +207,13 @@ TODO
 - Implements suffle and loop `_music_player.py <https://github.com/0oeduardoo0/ErinaBot/blob/master/ErinaBot/_music_player.py>`_.
 - Parse more kind of arguments `_conversation.py <https://github.com/0oeduardoo0/ErinaBot/blob/master/ErinaBot/_conversation.py#L78>`_.
 - Make this function works with different bot names `_conversation.py <https://github.com/0oeduardoo0/ErinaBot/blob/master/ErinaBot/_conversation.py#L226>`_.
-- Implements Logging.
+- Implements Logger.
+- Implements Neural Networks for intent recognition (I'm testing Convolutional-Neural-Network and Recurrent-Neural-Network (LSTM) but I'm not getting better results than Levenshtein distance).
 
 - Add more functionalities to the bot.
 
   - Roleplay
-  - Gifs
+  - Send gifs
   - Games
 
 Links
