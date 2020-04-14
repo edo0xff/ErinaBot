@@ -253,20 +253,8 @@ class Conversation():
 
         .. code-block:: python
 
-            import discord
-            import ErinaBot as erina
-
-            ACCESS_TOKEN = "your_atoken_here"
-
-            client = discord.Client()
-
-            # DEFINE HERE YOUR INTENTION HANDLERS
-
-            @client.event
-            async def on_ready():
-                print("Bot is ready!")
-                activity = discord.Activity(type=discord.ActivityType.watching, name="Movies!")
-                await client.change_presence(status=discord.Status.online, activity=activity)
+            # Bot initialization, intention dictionary load
+            # and intention definition here
 
             @client.event
             async def on_message(message):

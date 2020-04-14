@@ -363,20 +363,8 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            import discord</span>
-<span class="sd">            import ErinaBot as erina</span>
-
-<span class="sd">            ACCESS_TOKEN = &quot;your_atoken_here&quot;</span>
-
-<span class="sd">            client = discord.Client()</span>
-
-<span class="sd">            # DEFINE HERE YOUR INTENTION HANDLERS</span>
-
-<span class="sd">            @client.event</span>
-<span class="sd">            async def on_ready():</span>
-<span class="sd">                print(&quot;Bot is ready!&quot;)</span>
-<span class="sd">                activity = discord.Activity(type=discord.ActivityType.watching, name=&quot;Movies!&quot;)</span>
-<span class="sd">                await client.change_presence(status=discord.Status.online, activity=activity)</span>
+<span class="sd">            # Bot initialization, intention dictionary load</span>
+<span class="sd">            # and intention definition here</span>
 
 <span class="sd">            @client.event</span>
 <span class="sd">            async def on_message(message):</span>

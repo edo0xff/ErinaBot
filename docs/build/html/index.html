@@ -342,20 +342,8 @@ it will send the dialog answer.</p>
 just log an alert.</p>
 </div>
 <p><em>How to use it:</em></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">discord</span>
-<span class="kn">import</span> <span class="nn">ErinaBot</span> <span class="k">as</span> <span class="nn">erina</span>
-
-<span class="n">ACCESS_TOKEN</span> <span class="o">=</span> <span class="s2">&quot;your_atoken_here&quot;</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
-
-<span class="c1"># DEFINE HERE YOUR INTENTION HANDLERS</span>
-
-<span class="nd">@client</span><span class="o">.</span><span class="n">event</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">on_ready</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Bot is ready!&quot;</span><span class="p">)</span>
-    <span class="n">activity</span> <span class="o">=</span> <span class="n">discord</span><span class="o">.</span><span class="n">Activity</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="n">discord</span><span class="o">.</span><span class="n">ActivityType</span><span class="o">.</span><span class="n">watching</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Movies!&quot;</span><span class="p">)</span>
-    <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">change_presence</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">discord</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">online</span><span class="p">,</span> <span class="n">activity</span><span class="o">=</span><span class="n">activity</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bot initialization, intention dictionary load</span>
+<span class="c1"># and intention definition here</span>
 
 <span class="nd">@client</span><span class="o">.</span><span class="n">event</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
