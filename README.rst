@@ -142,7 +142,7 @@ Installation
 
 Clone the repository:
 
-..code-block:: none
+.. code-block:: none
 
     $ git clone https://github.com/0oeduardoo0/ErinaBot.git
 
