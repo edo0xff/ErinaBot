@@ -133,8 +133,8 @@ So if you run that example you can ask to the bot things like:
   you: Eri quiero escuchar "Ghost - rats"
   bot: *plays ghost - rats*
 
-Intalation
-~~~~~~~~~~
+Installation
+~~~~~~~~~~~~
 
 .. note::
 
@@ -144,7 +144,7 @@ Clone the repository:
 
 ..code-block:: none
 
-  $ git clone https://github.com/0oeduardoo0/ErinaBot.git
+    $ git clone https://github.com/0oeduardoo0/ErinaBot.git
 
 `ErinaBot.db <https://erinabot.readthedocs.io/en/latest/#erinabot>`_ is an Mongo database, so you need to install mongo db:
 
@@ -180,6 +180,25 @@ And to stop it:
     $ sudo chmod +x stop
     $ ./stop
 
+Once the bot is running invite him to your discord server then say hello (the only name
+that the bot recognize is *eri* and she speak only spanish for now. See. #TODO):
+
+.. code-block:: none
+
+   Hola eri!
+
+Or you can just tag the bot in the message:
+
+.. code-block:: none
+
+   @Botname help
+
+Or send a message like this (only spanish for now):
+
+.. code-block:: none
+
+   Hola eri ¿Qué puedes hacer?
+
 TODO
 ====
 
@@ -201,8 +220,9 @@ Links
 
 - `API Reference documentation <https://erinabot.readthedocs.io/en/latest>`_
 - `Discord Server <https://discord.gg/96aCQtv>`_
+- `How to get bot tokens: guide step by step <https://www.writebots.com/discord-bot-token/>`_
 
 CONTRIB
 =======
 
-Enter to discord server and let's talk about what we have to do! 
+Enter to discord server and let's talk about what we have to do!
