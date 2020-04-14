@@ -3,7 +3,7 @@ ErinaBot
 
 I know there is a lot of bots for discord that do a lot of nice stuff but I want a bot who I can talk naturally so thats why I'm developing this.
 
-First of all I'm not using neural networks for Natural Language Processing yet because I'm still developing a good architecture that works acceptable.  Instead of Neural Networks Erina just calculates the `Levenshtein distance <https://dzone.com/articles/the-levenshtein-algorithm-1>`_ between the input message and its related intention phrases, then chooses the intention with the lowest distance. And that is. It is very simple but it works.
+First of all I'm not using neural networks for Natural Language Processing yet because I'm still developing a good architecture that works acceptable.  Instead of Neural Networks Erina just calculates the `Levenshtein distance <https://dzone.com/articles/the-levenshtein-algorithm-1>`_ between the input message and its related intention phrases, then chooses the intention with the lowest distance. And that's it. It is very simple but it works.
 
 This bot works with two important concepts: *intentions* and *dialogs*, the first ones refers to actions that the bot can execute like *play_music*, *send_meme* and we define this intentions in a file called *intentions.yml* (so you must be familiarized with yaml syntax) like this:
 
@@ -152,7 +152,7 @@ Clone the repository:
 
     $ sudo apt install mongodb
 
-Install de required modules:
+Install the required modules:
 
 .. code-block:: none
 
