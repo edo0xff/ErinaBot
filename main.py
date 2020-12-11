@@ -12,7 +12,7 @@ from discord.ext import tasks
 from unidecode import unidecode
 
 
-ACCESS_TOKEN = ""
+ACCESS_TOKEN = os.environ['DISCORD_BOT_TOKEN']
 
 client = discord.Client()
 
