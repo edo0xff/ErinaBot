@@ -2,6 +2,7 @@ bs4
 lxml
 pyyaml
 discord
+requests
 unidecode
 youtube_dl
 pynacl
